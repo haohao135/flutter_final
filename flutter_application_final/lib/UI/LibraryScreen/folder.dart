@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/UI/CreateFolderScreen/create_folder.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class FolderList extends StatefulWidget {
   const FolderList({super.key});
@@ -32,7 +33,12 @@ class _FolderListState extends State<FolderList> {
             onPressed: ()async{
               var rs = await Navigator.push(context, MaterialPageRoute(builder: (context)=> const CreateFolder()));
               if(rs!=null){
-                
+                Fluttertoast.showToast(
+                  backgroundColor: Colors.green[600],
+                  textColor: Colors.white,
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  msg: "Thêm thư mục thành công");
               }
             }, child: const Text("Tạo thư mục", style: TextStyle(color: Colors.white),)),
         )

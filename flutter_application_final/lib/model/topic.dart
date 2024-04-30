@@ -11,4 +11,16 @@ class Topic{
   String author;
   List<String> listFoldersId = [];
   Topic({required this.id, required this.name, required this.listWords, required this.mode, required this.author, required this.userId});
+  Map<String, dynamic> toJson(){
+    return {
+      "id": id,
+      "userId": userId,
+      "name": name,
+      "listWords": listWords,
+      "mode": mode,
+      "listUserResults": listUserResults,
+      "author": author,
+      "listFoldersId": listFoldersId
+    };
+  }
 }

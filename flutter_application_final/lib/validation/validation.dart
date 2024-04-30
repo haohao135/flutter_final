@@ -14,4 +14,12 @@ class Validation{
   static bool isValidConfirmPassword(String password, String confirmPassword){
     return password == confirmPassword;
   }
+
+  static bool isValidName(String name){
+    return name.isNotEmpty;
+  }
+
+  static bool isValidDescription(String description){
+    return description.isNotEmpty && description.length > 5;
+  }
 }
