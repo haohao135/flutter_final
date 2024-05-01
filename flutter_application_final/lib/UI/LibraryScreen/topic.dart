@@ -39,7 +39,7 @@ class _TopicListState extends State<TopicList> {
               var rs = await Navigator.push(context, MaterialPageRoute(builder: (context)=> const CreateTopic()));
               if(rs!=null){
                 Fluttertoast.showToast(
-                  backgroundColor: Colors.green[600],
+                  backgroundColor: Colors.teal,
                   textColor: Colors.white,
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_final/UI/CreateFolderScreen/create_folder.dart';
+import 'package:flutter_application_final/UI/CreateTopicScreen/create_topic.dart';
 import 'package:flutter_application_final/UI/LibraryScreen/class.dart';
 import 'package:flutter_application_final/UI/LibraryScreen/folder.dart';
 import 'package:flutter_application_final/UI/LibraryScreen/topic.dart';
@@ -21,14 +23,16 @@ class _LibraryPageState extends State<LibraryPage>
     _tabController.dispose();
     super.dispose();
   }
+
   @override
   void initState() {
     p = widget.pos ?? -1;
-    if(p != -1){
+    if (p != -1) {
       _tabController.animateTo(p);
     }
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,34 +43,61 @@ class _LibraryPageState extends State<LibraryPage>
           "Thư viện",
           style: TextStyle(color: Colors.white),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                if (p == 0 || p == -1) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CreateFolder()));
+                }
+                if (p == 1) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CreateTopic()));
+                }
+                if (p == 2) {}
+              },
+              icon: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ))
+        ],
         bottom: TabBar(
-          indicatorColor: Colors.amber,
-          controller: _tabController,
-          labelColor: Colors.amber,
-          unselectedLabelColor: Colors.white,
-          tabs: const [
-          Tab(
-            text: "Thư mục",
-            icon: Icon(
-              Icons.folder,
-              color: Colors.white,
-            ),
-          ),
-          Tab(
-            text: "Chủ đề",
-            icon: Icon(
-              Icons.topic,
-              color: Colors.white,
-            ),
-          ),
-          Tab(
-            text: "Lớp",
-            icon: Icon(
-              Icons.people,
-              color: Colors.white,
-            ),
-          ),
-        ]),
+            onTap: (value) {
+              setState(() {
+                p = value;
+              });
+            },
+            indicatorColor: Colors.amber,
+            controller: _tabController,
+            labelColor: Colors.amber,
+            unselectedLabelColor: Colors.white,
+            tabs: const [
+              Tab(
+                text: "Thư mục",
+                icon: Icon(
+                  Icons.folder,
+                  color: Colors.white,
+                ),
+              ),
+              Tab(
+                text: "Chủ đề",
+                icon: Icon(
+                  Icons.topic,
+                  color: Colors.white,
+                ),
+              ),
+              Tab(
+                text: "Lớp",
+                icon: Icon(
+                  Icons.people,
+                  color: Colors.white,
+                ),
+              ),
+            ]),
       ),
       body: TabBarView(
         controller: _tabController,

@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/UI/LoginScreen/login.dart';
+import 'package:flutter_application_final/UI/MainScreen/main_screen.dart';
 
 
 void main() async {
@@ -14,8 +16,26 @@ void main() async {
     storageBucket: 'flutter-ck-933e2.appspot.com',
   )
 );
-  runApp(const MaterialApp(
+  // runApp(const MaterialApp(
+  //   debugShowCheckedModeBanner: false,
+  //   home: SafeArea(child: LoginPage()),
+  // ));
+  checkUserLoggedIn();
+}
+
+Future<void> checkUserLoggedIn() async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  User? user = auth.currentUser;
+
+  if (user != null) {
+    runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: SafeArea(child: MainPage()),
+  ));
+  } else {
+    runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     home: SafeArea(child: LoginPage()),
   ));
+  }
 }

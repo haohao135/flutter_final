@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_final/FireBase/register_account.dart';
 import 'package:flutter_application_final/UI/RegisterScreen/register.dart';
 import 'package:flutter_application_final/validation/validation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -209,8 +210,16 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const Text("Chưa có tài khoản?"),
               GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const Register1()));
+                onTap: () async{
+                  var rs = await Navigator.push(context, MaterialPageRoute(builder: (context)=> const Register1()));
+                  if(rs!=null){
+                Fluttertoast.showToast(
+                  backgroundColor: Colors.teal,
+                  textColor: Colors.white,
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  msg: "Đăng ký tài khoản thành công");
+              }
                 },
                 child: const Text(
                   " Đăng ký ",

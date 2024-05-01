@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_final/FireBase/create_folder_firebase.dart';
 import 'package:flutter_application_final/UI/CreateFolderScreen/create_folder.dart';
+import 'package:flutter_application_final/model/folder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class FolderList extends StatefulWidget {
@@ -10,10 +12,46 @@ class FolderList extends StatefulWidget {
 }
 
 class _FolderListState extends State<FolderList> {
-  bool hasFolder = false;
+  List<Folder>? folders;
+  bool isLoading = false;
+
+  @override
+  void initState(){
+    getData();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    return !hasFolder ? noFolder() : const Text("hi");
+    if(isLoading){
+      return const Center(child: CircularProgressIndicator(),);
+    } else {
+      if(folders == null){
+        return noFolder();
+      } else {
+        return hasFolder();
+      }
+    }
+  }
+
+  void getData() async{
+    setState(() {
+      isLoading = true;
+    });
+    List<Folder> folderData = await CreateFolderFireBase.getFolderData();
+    setState(() {
+      folders = folderData;
+      isLoading = false;
+    });
+  }
+
+  Widget hasFolder(){
+    return ListView.builder(
+      itemCount: folders!.length,
+      itemBuilder: (context, index)=> ListTile(
+      leading: const Icon(Icons.folder, color: Colors.amber,),
+      title: Text(folders![index].name),
+      subtitle: Text(folders![index].description, maxLines: 1,),
+    ));
   }
   Widget noFolder(){
     return Column(
@@ -34,7 +72,7 @@ class _FolderListState extends State<FolderList> {
               var rs = await Navigator.push(context, MaterialPageRoute(builder: (context)=> const CreateFolder()));
               if(rs!=null){
                 Fluttertoast.showToast(
-                  backgroundColor: Colors.green[600],
+                  backgroundColor: Colors.teal,
                   textColor: Colors.white,
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,

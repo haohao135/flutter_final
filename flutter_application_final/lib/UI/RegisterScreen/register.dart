@@ -65,10 +65,9 @@ class _RegisterPageState extends State<RegisterPage> {
         isLoading = false;
       });
       // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Đăng ký tài khoản thành công")));
-      // ignore: use_build_context_synchronously
       Navigator.pop(context);
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context, "OK");
     }
     if (!Validation.isValidEmail(cl1.text)) {
       setState(() {
