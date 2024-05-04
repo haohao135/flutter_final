@@ -16,16 +16,19 @@ class _FolderListState extends State<FolderList> {
   bool isLoading = false;
 
   @override
-  void initState(){
+  void initState() {
     getData();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-    if(isLoading){
-      return const Center(child: CircularProgressIndicator(),);
+    if (isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
     } else {
-      if(folders == null){
+      if (folders == null) {
         return noFolder();
       } else {
         return hasFolder();
@@ -33,7 +36,7 @@ class _FolderListState extends State<FolderList> {
     }
   }
 
-  void getData() async{
+  void getData() async {
     setState(() {
       isLoading = true;
     });
@@ -44,41 +47,61 @@ class _FolderListState extends State<FolderList> {
     });
   }
 
-  Widget hasFolder(){
-    return ListView.builder(
-      itemCount: folders!.length,
-      itemBuilder: (context, index)=> ListTile(
-      leading: const Icon(Icons.folder, color: Colors.amber,),
-      title: Text(folders![index].name),
-      subtitle: Text(folders![index].description, maxLines: 1,),
-    ));
+  Widget hasFolder() {
+    return ListView.separated(
+        separatorBuilder: (context, index) => const Divider(
+              indent: 20,
+              endIndent: 20,
+            ),
+        itemCount: folders!.length,
+        itemBuilder: (context, index) => ListTile(
+              leading: const Icon(
+                Icons.folder,
+                color: Colors.amber,
+              ),
+              title: Text(folders![index].name),
+              subtitle: Text(
+                folders![index].description,
+                maxLines: 1,
+              ),
+            ));
   }
-  Widget noFolder(){
+
+  Widget noFolder() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text("Chưa có thư mục nào", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+        const Text(
+          "Chưa có thư mục nào",
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
         SizedBox(
           width: 150,
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 163, 45, 206),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              )
-            ),
-            onPressed: ()async{
-              var rs = await Navigator.push(context, MaterialPageRoute(builder: (context)=> const CreateFolder()));
-              if(rs!=null){
-                Fluttertoast.showToast(
-                  backgroundColor: Colors.teal,
-                  textColor: Colors.white,
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  msg: "Thêm thư mục thành công");
-              }
-            }, child: const Text("Tạo thư mục", style: TextStyle(color: Colors.white),)),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 163, 45, 206),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  )),
+              onPressed: () async {
+                var rs = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CreateFolder()));
+                if (rs != null) {
+                  Fluttertoast.showToast(
+                      backgroundColor: Colors.teal,
+                      textColor: Colors.white,
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      msg: "Thêm thư mục thành công");
+                }
+              },
+              child: const Text(
+                "Tạo thư mục",
+                style: TextStyle(color: Colors.white),
+              )),
         )
       ],
     );

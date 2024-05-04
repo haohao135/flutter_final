@@ -1,10 +1,7 @@
 part of 'create_topic_bloc.dart';
 
-sealed class CreateTopicState extends Equatable {
+sealed class CreateTopicState{
   const CreateTopicState();
-  
-  @override
-  List<Object> get props => [];
 }
 
 final class CreateTopicActionState extends CreateTopicState {}

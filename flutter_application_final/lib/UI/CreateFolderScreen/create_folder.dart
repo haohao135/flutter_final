@@ -25,7 +25,7 @@ class _CreateFolderState extends State<CreateFolder> {
           },
           icon: const Icon(Icons.arrow_back, color: Colors.white,),
         ),
-        title: const Text("Tạo folder mới", style: TextStyle(color: Colors.white),), backgroundColor: const Color.fromARGB(255, 163, 45, 206),
+        title: const Text("Tạo thư mục mới", style: TextStyle(color: Colors.white),), backgroundColor: const Color.fromARGB(255, 163, 45, 206),
         actions:[
           IconButton(onPressed: _createFolder, icon: const Icon(Icons.check, color: Colors.white,)),
           const SizedBox(width: 10,)

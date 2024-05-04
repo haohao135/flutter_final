@@ -98,11 +98,11 @@ class _RegisterPageState extends State<RegisterPage> {
     }
     if (!Validation.isValidConfirmPassword(cl3.text, cl4.text)) {
       setState(() {
-        er4 = true;
+        er4 = false;
       });
     } else{
       setState(() {
-        er4 = false;
+        er4 = true;
       });
     }
   }

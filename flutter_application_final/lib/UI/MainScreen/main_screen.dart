@@ -185,7 +185,7 @@ class _MainPageState extends State<MainPage> {
                           size: 25,
                         ),
                         Text(
-                          "Lời giải",
+                          "Tài liệu",
                           style: TextStyle(
                               color:
                                   currenTab == 1 ? Colors.amber : Colors.white,

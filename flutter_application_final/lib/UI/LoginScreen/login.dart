@@ -98,8 +98,7 @@ class _LoginPageState extends State<LoginPage> {
             decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: "Mật khẩu",
-                errorText: er2 ? "Mật khẩu phải trên 6 kí tự" : null,
-                    
+                errorText: er2 ? "Mật khẩu phải trên 6 kí tự" : null,                   
                 suffixIcon: IconButton(
                     onPressed: () {
                       setState(() {

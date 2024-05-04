@@ -4,6 +4,7 @@ import 'package:flutter_application_final/UI/CreateTopicScreen/create_topic.dart
 import 'package:flutter_application_final/UI/LibraryScreen/class.dart';
 import 'package:flutter_application_final/UI/LibraryScreen/folder.dart';
 import 'package:flutter_application_final/UI/LibraryScreen/topic.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // ignore: must_be_immutable
 class LibraryPage extends StatefulWidget {
@@ -45,18 +46,35 @@ class _LibraryPageState extends State<LibraryPage>
         ),
         actions: [
           IconButton(
-              onPressed: () {
+              onPressed: () async {
                 if (p == 0 || p == -1) {
-                  Navigator.push(
+                  var rs = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const CreateFolder()));
+                  if (rs != null) {
+                    Fluttertoast.showToast(
+                        backgroundColor: Colors.teal,
+                        textColor: Colors.white,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        msg: "Thêm thư mục thành công");
+                  }
                 }
                 if (p == 1) {
-                  Navigator.push(
+                  // ignore: use_build_context_synchronously
+                  var rs = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const CreateTopic()));
+                  if (rs != null) {
+                    Fluttertoast.showToast(
+                        backgroundColor: Colors.teal,
+                        textColor: Colors.white,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        msg: "Thêm chủ đề thành công");
+                  }
                 }
                 if (p == 2) {}
               },

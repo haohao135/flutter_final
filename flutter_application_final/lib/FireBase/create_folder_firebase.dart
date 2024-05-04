@@ -16,17 +16,22 @@ class CreateFolderFireBase {
     List<Folder> folders = [];
     try {
       QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection("folders").get();  
-      if (querySnapshot.docs.isNotEmpty) { 
+          await FirebaseFirestore.instance.collection("folders").get();
+      if (querySnapshot.docs.isNotEmpty) {
         String userId = FirebaseAuth.instance.currentUser!.uid;
         for (var i in querySnapshot.docs) {
           Map<String, dynamic> data = i.data() as Map<String, dynamic>;
-          
-          Folder folder = Folder(id: i.id, name: data["name"] ?? "", userId: userId, description: data["description"] ?? "");
-          List<dynamic> lists = data["listTopicId"] as List<dynamic>;
-          List<String> stringList = lists.map((e) => e.toString()).toList();
-          folder.listTopicId.addAll(stringList);
-          folders.add(folder);
+          if (userId == data["userId"]) {
+            Folder folder = Folder(
+                id: i.id,
+                name: data["name"] ?? "",
+                userId: userId,
+                description: data["description"] ?? "");
+            List<dynamic> lists = data["listTopicId"] as List<dynamic>;
+            List<String> stringList = lists.map((e) => e.toString()).toList();
+            folder.listTopicId.addAll(stringList);
+            folders.add(folder);
+          }
         }
       } else {
         // ignore: avoid_print
