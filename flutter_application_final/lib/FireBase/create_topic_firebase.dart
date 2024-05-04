@@ -1,11 +1,55 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter_application_final/model/topic.dart';
-// import 'package:uuid/uuid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_final/model/topic.dart';
+import 'package:flutter_application_final/model/word.dart';
 
-// class CreateTopicFireBase{
-//   static Future<void> createTopic(String userId, String name, String description) async{
-//       String id = const Uuid().v4();
-//       Topic topic = Topic(id: id, name: name, listWords: listWords, mode: mode, author: author, userId: userId);
-//       await FirebaseFirestore.instance.collection("folders").add();
-//   }
-// }
+class CreateTopicFireBase {
+  static Future<void> createTopic(Topic topic) async {
+    await FirebaseFirestore.instance.collection("topics").add(topic.toJson());
+  }
+
+  static Future<List<Topic>> getTopicData() async {
+    List<Topic> topicList = [];
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection("topics").get();
+      if (querySnapshot.docs.isNotEmpty) {
+        for (var i in querySnapshot.docs) {
+          String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+          Map<String, dynamic> data = i.data() as Map<String, dynamic>;
+          if (currentUserId == i["userId"]) {
+            List<dynamic> list =
+                data["listWords"] as List<dynamic>;
+            List<Map<String, dynamic>> convertedWordList =
+                list.map((e) => e as Map<String, dynamic>).toList();
+            List<Word> wordList = convertedWordList.map((e) {
+              Word word = Word(
+                  id: e["id"],
+                  term: e["term"],
+                  definition: e["definition"],
+                  statusE: e["statusE"],
+                  isStar: e["isStar"],
+                  topicId: e["topicId"]);
+              return word;
+            }).toList();
+            Topic topic = Topic(
+                id: i.id,
+                name: data["name"],
+                listWords: wordList,
+                mode: i["mode"],
+                author: i["author"],
+                userId: i["userId"]);
+            topicList.add(topic);
+          }
+        }
+      }
+      return topicList;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+      // ignore: avoid_print
+      print("Khong lay duoc topic tu firebase");
+      return [];
+    }
+  }
+}

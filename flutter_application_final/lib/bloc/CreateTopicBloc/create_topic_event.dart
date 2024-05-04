@@ -1,10 +1,7 @@
 part of 'create_topic_bloc.dart';
 
-sealed class CreateTopicEvent extends Equatable {
+sealed class CreateTopicEvent{
   const CreateTopicEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
 class CreateTopicEventInitial extends CreateTopicEvent{}
@@ -17,7 +14,5 @@ class ClickFloattingButtonEvent extends CreateTopicEvent{
 class ClickCompleteButtonEvent extends CreateTopicEvent{}
 // ignore: must_be_immutable
 class ClickScanDocumentButtonEvent extends CreateTopicEvent{
-  // int count;
-  // ClickScanDocumentButtonEvent({required this.count});
 }
 class Error extends CreateTopicEvent{}

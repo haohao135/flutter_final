@@ -16,10 +16,6 @@ void main() async {
     storageBucket: 'flutter-ck-933e2.appspot.com',
   )
 );
-  // runApp(const MaterialApp(
-  //   debugShowCheckedModeBanner: false,
-  //   home: SafeArea(child: LoginPage()),
-  // ));
   checkUserLoggedIn();
 }
 
