@@ -106,7 +106,9 @@ class _LoginPageState extends State<LoginPage> {
                         hidePassword = !hidePassword;
                       });
                     },
-                    icon: const Icon(Icons.remove_red_eye))),
+                    icon: hidePassword
+                      ? const Icon(Icons.visibility)
+                      : const Icon(Icons.visibility_off))),
           ),
           const SizedBox(
             height: 10,
@@ -186,23 +188,23 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                   width: 70,
                   height: 70,
-                  child: Image.network(
-                      "https://1000logos.net/wp-content/uploads/2017/02/Facebook-Logosu.png")),
+                  child: Image.asset(
+                      "assets/images/Facebook-Logo.png")),
               SizedBox(
                   width: 40,
                   height: 40,
-                  child: Image.network(
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/512px-Logo_of_Twitter.svg.png")),
+                  child: Image.asset(
+                      "assets/images/Twitter-Logo.png")),
               SizedBox(
                   width: 40,
                   height: 40,
-                  child: Image.network(
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png")),
+                  child: Image.asset(
+                      "assets/images/Google-Logo.png")),
               SizedBox(
                   width: 40,
                   height: 40,
-                  child: Image.network(
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/833px-Apple_logo_black.svg.png")),
+                  child: Image.asset(
+                      "assets/images/Apple-logo.png")),
             ],
           ),
           Row(
