@@ -13,3 +13,12 @@ final class TopicManagerSuccessState extends TopicManagerState {
 }
 final class TopicManagerLoadingState extends TopicManagerState {}
 final class TopicManagerErrorState extends TopicManagerState {}
+
+final class DetailTopicManagerEventClickState extends TopicManagerActionState {
+  Topic topic;
+  DetailTopicManagerEventClickState({required this.topic});
+}
+class DeleteTopicManagerState extends TopicManagerEvent{
+  Topic topic;
+  DeleteTopicManagerState({required this.topic});
+}

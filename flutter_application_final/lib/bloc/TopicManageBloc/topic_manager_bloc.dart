@@ -11,6 +11,8 @@ class TopicManagerBloc extends Bloc<TopicManagerEvent, TopicManagerState> {
     on<InitialTopicManagerEvent>(_initialTopicManagerEvent);
     on<CreateTopicManagerEvent>(_createTopicManagerEvent);
     on<LoadingTopicManagerEvent>(_loadingTopicManagerEvent);
+    on<DetailTopicManagerEventClickEvent>(_detailTopicManagerEventClickEvent);
+    on<DeleteTopicManagerEvent>(_deleteTopicManagerEvent);
   }
 
   FutureOr<void> _initialTopicManagerEvent(InitialTopicManagerEvent event, Emitter<TopicManagerState> emit) {
@@ -26,5 +28,15 @@ class TopicManagerBloc extends Bloc<TopicManagerEvent, TopicManagerState> {
 
   FutureOr<void> _loadingTopicManagerEvent(LoadingTopicManagerEvent event, Emitter<TopicManagerState> emit) {
     emit(TopicManagerLoadingState());
+  }
+
+  FutureOr<void> _detailTopicManagerEventClickEvent(DetailTopicManagerEventClickEvent event, Emitter<TopicManagerState> emit) {
+    emit(DetailTopicManagerEventClickState(topic: event.topic));
+  }
+
+  FutureOr<void> _deleteTopicManagerEvent(DeleteTopicManagerEvent event, Emitter<TopicManagerState> emit) {
+    emit(TopicManagerLoadingState());
+    event.topicList!.remove(event.topic);
+    emit(TopicManagerSuccessState(topicList: event.topicList ?? []));
   }
 }

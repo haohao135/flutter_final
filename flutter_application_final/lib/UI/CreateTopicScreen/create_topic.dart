@@ -23,12 +23,14 @@ class _CreateTopicState extends State<CreateTopic> {
   final CreateTopicBloc createTopicBloc = CreateTopicBloc();
 
   // ignore: unused_field
-  List<TextEditingController>? _controllers1;
+  final List<TextEditingController> _controllers1 = [];
   // ignore: unused_field
-  List<TextEditingController>? _controllers2;
+  final List<TextEditingController> _controllers2 = [];
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
+    _controllers1.add(TextEditingController());
+    _controllers2.add(TextEditingController());
     createTopicBloc.add(CreateTopicEventInitial());
     super.initState();
   }
@@ -49,10 +51,6 @@ class _CreateTopicState extends State<CreateTopic> {
         switch (state.runtimeType) {
           case CreateTopicIsSuccess:
             final successState = state as CreateTopicIsSuccess;
-            _controllers1 = List<TextEditingController>.generate(
-                successState.count, (index) => TextEditingController());
-            _controllers2 = List<TextEditingController>.generate(
-                successState.count, (index) => TextEditingController());
 
             return Scaffold(
               appBar: AppBar(
@@ -71,8 +69,18 @@ class _CreateTopicState extends State<CreateTopic> {
                 backgroundColor: const Color.fromARGB(255, 163, 45, 206),
                 actions: [
                   IconButton(
-                      onPressed: () async{
-                        if (_formKey.currentState!.validate()) {
+                      onPressed: () async {
+                        if (classNameController.text.isEmpty) {
+                          setState(() {
+                            er1 = true;
+                          });
+                        } else {
+                          setState(() {
+                            er1 = false;
+                          });
+                        }
+
+                        if (_formKey.currentState!.validate() && !er1) {
                           setState(() {
                             isLoading = true;
                           });
@@ -91,8 +99,8 @@ class _CreateTopicState extends State<CreateTopic> {
                             String wordId = const Uuid().v4();
                             Word word = Word(
                                 id: wordId,
-                                term: _controllers1![i].text,
-                                definition: _controllers2![i].text,
+                                term: _controllers1[i].text,
+                                definition: _controllers2[i].text,
                                 statusE: "notLearn",
                                 isStar: false,
                                 topicId: topicId);
@@ -106,7 +114,7 @@ class _CreateTopicState extends State<CreateTopic> {
                               author: FirebaseAuth.instance.currentUser!.email,
                               userId: FirebaseAuth.instance.currentUser!.uid,
                               listWords: list);
-                            await CreateTopicFireBase.createTopic(topic);
+                          await CreateTopicFireBase.createTopic(topic);
                           setState(() {
                             isLoading = false;
                           });
@@ -195,7 +203,7 @@ class _CreateTopicState extends State<CreateTopic> {
                             itemCount: successState.count,
                             itemBuilder: (context, index) {
                               return addTerm(
-                                  _controllers1![index], _controllers2![index]);
+                                  _controllers1[index], _controllers2[index]);
                             },
                           ),
                         ),
@@ -206,6 +214,8 @@ class _CreateTopicState extends State<CreateTopic> {
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
+                  _controllers1.add(TextEditingController());
+                  _controllers2.add(TextEditingController());
                   createTopicBloc.add(
                       ClickFloattingButtonEvent(count: successState.count));
                 },

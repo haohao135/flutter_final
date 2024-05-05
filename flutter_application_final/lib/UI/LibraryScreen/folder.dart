@@ -28,7 +28,7 @@ class _FolderListState extends State<FolderList> {
         child: CircularProgressIndicator(),
       );
     } else {
-      if (folders == null) {
+      if (folders == null || folders!.isEmpty) {
         return noFolder();
       } else {
         return hasFolder();
