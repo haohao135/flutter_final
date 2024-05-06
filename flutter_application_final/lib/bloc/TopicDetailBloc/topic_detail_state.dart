@@ -13,3 +13,8 @@ class TopicDetailSuccesslState extends TopicDetailState{
   TopicDetailSuccesslState({required this.topic});
 }
 class TopicDetailErrorlState extends TopicDetailState{}
+class TopicDetailFlashCardClicklState extends TopicDetailActionState{
+  int total;
+  Topic topic;
+  TopicDetailFlashCardClicklState({required this.total, required this.topic});
+}

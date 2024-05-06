@@ -51,7 +51,6 @@ class _CreateTopicState extends State<CreateTopic> {
         switch (state.runtimeType) {
           case CreateTopicIsSuccess:
             final successState = state as CreateTopicIsSuccess;
-
             return Scaffold(
               appBar: AppBar(
                 leading: IconButton(

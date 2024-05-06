@@ -1,4 +1,5 @@
 import 'package:flutter_application_final/model/archievement.dart';
+import 'package:flutter_application_final/model/word.dart';
 
 class Users{
   late String id;
@@ -6,6 +7,7 @@ class Users{
   late String name;
   String? favoriteId;
   late List<Archievement> listArchievement = [];
+  late List<Word> listFavouriteWord = [];
 
   Users({required this.id, required this.email, required this.name});
 
@@ -15,7 +17,8 @@ class Users{
       "email": email,
       "name": name,
       "favoriteId": favoriteId,
-      "archievement": listArchievement
+      "archievement": listArchievement,
+      "listFavouriteWord": listFavouriteWord
     };
   }
 }

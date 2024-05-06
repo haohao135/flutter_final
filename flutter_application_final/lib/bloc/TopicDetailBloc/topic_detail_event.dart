@@ -15,5 +15,10 @@ class TopicDetailSuccesslEvent extends TopicDetailEvent {
   Topic topic;
   TopicDetailSuccesslEvent({required this.topic});
 }
+class TopicDetailFlashCardClicklEvent extends TopicDetailEvent {
+  int total;
+  Topic topic;
+  TopicDetailFlashCardClicklEvent({required this.total, required this.topic});
+}
 
 class TopicDetailErrorlEvent extends TopicDetailEvent {}

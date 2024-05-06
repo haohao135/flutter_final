@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_final/UI/FlashCardScreen/flash_card.dart';
 import 'package:flutter_application_final/bloc/TopicDetailBloc/topic_detail_bloc.dart';
 import 'package:flutter_application_final/model/topic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,7 +38,16 @@ class _TopicDetailState extends State<TopicDetail> {
       bloc: topicDetailBloc,
       listenWhen: (previous, current) => current is TopicDetailActionState,
       buildWhen: (previous, current) => current is! TopicDetailActionState,
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is TopicDetailFlashCardClicklState) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FlashCard(
+                    currentWord: 1, totalWord: state.total, topic: state.topic),
+              ));
+        }
+      },
       builder: (context, state) {
         switch (state.runtimeType) {
           case TopicDetailSuccesslState:
@@ -193,9 +203,62 @@ class _TopicDetailState extends State<TopicDetail> {
                       const SizedBox(
                         height: 20,
                       ),
+                      GestureDetector(
+                        onTap: () {
+                          topicDetailBloc.add(TopicDetailFlashCardClicklEvent(
+                              topic: successState.topic,
+                              total: successState.topic.listWords.length));
+                        },
+                        child: Container(
+                          height: 60,
+                          decoration: const BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(2,
+                                    2),
+                                blurRadius: 4,
+                                spreadRadius:
+                                    1,
+                              ),
+                            ],
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          child: const Row(children: [
+                            SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: Image(
+                                  image: AssetImage("assets/images/card.jpg"),
+                                )),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              "FlashCard",
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold),
+                            )
+                          ]),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Container(
                         height: 60,
                         decoration: const BoxDecoration(
+                          boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(2,
+                                    2),
+                                blurRadius: 4,
+                                spreadRadius:
+                                    1,
+                              ),
+                            ],
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                         ),
@@ -222,6 +285,16 @@ class _TopicDetailState extends State<TopicDetail> {
                       Container(
                         height: 60,
                         decoration: const BoxDecoration(
+                          boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(2,
+                                    2),
+                                blurRadius: 4,
+                                spreadRadius:
+                                    1,
+                              ),
+                            ],
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                         ),
@@ -248,32 +321,16 @@ class _TopicDetailState extends State<TopicDetail> {
                       Container(
                         height: 60,
                         decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        child: const Row(children: [
-                          SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Image(
-                                image: AssetImage("assets/images/card.jpg"),
-                              )),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            "FlasCard",
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          )
-                        ]),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: 60,
-                        decoration: const BoxDecoration(
+                          boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(2,
+                                    2),
+                                blurRadius: 4,
+                                spreadRadius:
+                                    1,
+                              ),
+                            ],
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                         ),
@@ -330,7 +387,7 @@ class _TopicDetailState extends State<TopicDetail> {
                                     IconButton(
                                         onPressed: () {
                                           speak(successState
-                                                .topic.listWords[index].term);
+                                              .topic.listWords[index].term);
                                         },
                                         icon: const Icon(Icons.volume_up)),
                                     IconButton(
@@ -368,7 +425,7 @@ class _TopicDetailState extends State<TopicDetail> {
     );
   }
 
-  Future<void> speak(String text) async{
+  Future<void> speak(String text) async {
     await flutterTts.setLanguage('en-US');
     await flutterTts.setPitch(1);
     await flutterTts.speak(text);
