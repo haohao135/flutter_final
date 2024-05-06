@@ -44,6 +44,7 @@ dependencies:
   provider: ^6.1.2
   fluttertoast: ^8.2.5
   bloc: ^8.1.4
+  flutter_tts: ^4.0.2
 
 dev_dependencies:
   flutter_test:
