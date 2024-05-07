@@ -11,6 +11,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
   TopicDetailBloc() : super(TopicDetailInitialState()) {
     on<TopicDetailInitialEvent>(_topicDetailInitialEvent);
     on<TopicDetailFlashCardClicklEvent>(_topicDetailFlashCardClicklEvent);
+    on<TopicDetailQuizzClicklEvent>(_topicDetailQuizzzClicklEvent);
   }
 
   FutureOr<void> _topicDetailInitialEvent(TopicDetailInitialEvent event, Emitter<TopicDetailState> emit) {
@@ -19,5 +20,9 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
 
   FutureOr<void> _topicDetailFlashCardClicklEvent(TopicDetailFlashCardClicklEvent event, Emitter<TopicDetailState> emit) {
     emit(TopicDetailFlashCardClicklState(topic: event.topic, total: event.total));
+  }
+
+  FutureOr<void> _topicDetailQuizzzClicklEvent(TopicDetailQuizzClicklEvent event, Emitter<TopicDetailState> emit) {
+    emit(TopicDetailQuizzClicklState(topic: event.topic));
   }
 }

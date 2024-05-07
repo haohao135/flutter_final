@@ -89,9 +89,28 @@ class _FlashCardState extends State<FlashCard> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 163, 45, 206),
         onPressed: () {
-          for (var i = 0; i < widget.currentWord; i++) {
-            Navigator.pop(context);
-          }
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+              content: const Text("Bạn đồng ý thoát?", style: TextStyle(fontSize: 20),),
+              contentPadding: const EdgeInsets.all(30),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Hủy")),
+                TextButton(
+                    onPressed: () {
+                      for (var i = 0; i <= widget.currentWord; i++) {
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: const Text("Đồng ý")),
+              ],
+            ),
+          );
         },
         shape: const CircleBorder(),
         child: const Icon(

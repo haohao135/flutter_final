@@ -55,10 +55,7 @@ class _FolderListState extends State<FolderList> {
             ),
         itemCount: folders!.length,
         itemBuilder: (context, index) => ListTile(
-              leading: const Icon(
-                Icons.folder,
-                color: Colors.amber,
-              ),
+              leading: Image.asset("assets/images/folder.png"),
               title: Text(folders![index].name),
               subtitle: Text(
                 folders![index].description,

@@ -18,3 +18,8 @@ class TopicDetailFlashCardClicklState extends TopicDetailActionState{
   Topic topic;
   TopicDetailFlashCardClicklState({required this.total, required this.topic});
 }
+
+class TopicDetailQuizzClicklState extends TopicDetailActionState{
+  Topic topic;
+  TopicDetailQuizzClicklState({required this.topic});
+}

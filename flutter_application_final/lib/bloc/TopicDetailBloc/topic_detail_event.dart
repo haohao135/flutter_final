@@ -21,4 +21,9 @@ class TopicDetailFlashCardClicklEvent extends TopicDetailEvent {
   TopicDetailFlashCardClicklEvent({required this.total, required this.topic});
 }
 
+class TopicDetailQuizzClicklEvent extends TopicDetailEvent {
+  Topic topic;
+  TopicDetailQuizzClicklEvent({required this.topic});
+}
+
 class TopicDetailErrorlEvent extends TopicDetailEvent {}

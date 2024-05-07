@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/UI/FlashCardScreen/flash_card.dart';
+import 'package:flutter_application_final/UI/QuizzScreen/quizz.dart';
 import 'package:flutter_application_final/bloc/TopicDetailBloc/topic_detail_bloc.dart';
 import 'package:flutter_application_final/model/topic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,6 +47,12 @@ class _TopicDetailState extends State<TopicDetail> {
                 builder: (context) => FlashCard(
                     currentWord: 1, totalWord: state.total, topic: state.topic),
               ));
+        }
+        if(state is TopicDetailQuizzClicklState){
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Quizz(topic: state.topic, currentWord: 1, seconds: 0, correctAnswer: 0,)));
         }
       },
       builder: (context, state) {
@@ -210,16 +217,15 @@ class _TopicDetailState extends State<TopicDetail> {
                               total: successState.topic.listWords.length));
                         },
                         child: Container(
+                          padding: const EdgeInsets.all(4),
                           height: 60,
                           decoration: const BoxDecoration(
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey,
-                                offset: Offset(2,
-                                    2),
+                                offset: Offset(2, 2),
                                 blurRadius: 4,
-                                spreadRadius:
-                                    1,
+                                spreadRadius: 1,
                               ),
                             ],
                             color: Colors.white,
@@ -230,7 +236,7 @@ class _TopicDetailState extends State<TopicDetail> {
                                 height: 40,
                                 width: 40,
                                 child: Image(
-                                  image: AssetImage("assets/images/card.jpg"),
+                                  image: AssetImage("assets/images/flash-cards.png"),
                                 )),
                             SizedBox(
                               width: 20,
@@ -246,55 +252,82 @@ class _TopicDetailState extends State<TopicDetail> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        height: 60,
-                        decoration: const BoxDecoration(
-                          boxShadow: [
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0)),
+                              content: const Text(
+                                "Vào trang làm trắc nghiệm?",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              contentPadding: const EdgeInsets.all(30),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Hủy")),
+                                TextButton(
+                                    onPressed: () {
+                                      topicDetailBloc.add(TopicDetailQuizzClicklEvent(topic: successState.topic));
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Đồng ý")),
+                              ],
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          height: 60,
+                          decoration: const BoxDecoration(
+                            boxShadow: [
                               BoxShadow(
                                 color: Colors.grey,
-                                offset: Offset(2,
-                                    2),
+                                offset: Offset(2, 2),
                                 blurRadius: 4,
-                                spreadRadius:
-                                    1,
+                                spreadRadius: 1,
                               ),
                             ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        child: const Row(children: [
-                          SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Image(
-                                image: AssetImage("assets/images/card.jpg"),
-                              )),
-                          SizedBox(
-                            width: 20,
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
-                          Text(
-                            "FlasCard",
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          )
-                        ]),
+                          child: const Row(children: [
+                            SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: Image(
+                                  image: AssetImage("assets/images/quizz.png"),
+                                )),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              "Quizz",
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold),
+                            )
+                          ]),
+                        ),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
                       Container(
+                        padding: const EdgeInsets.all(4),
                         height: 60,
                         decoration: const BoxDecoration(
                           boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey,
-                                offset: Offset(2,
-                                    2),
-                                blurRadius: 4,
-                                spreadRadius:
-                                    1,
-                              ),
-                            ],
+                            BoxShadow(
+                              color: Colors.grey,
+                              offset: Offset(2, 2),
+                              blurRadius: 4,
+                              spreadRadius: 1,
+                            ),
+                          ],
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                         ),
@@ -303,49 +336,13 @@ class _TopicDetailState extends State<TopicDetail> {
                               height: 40,
                               width: 40,
                               child: Image(
-                                image: AssetImage("assets/images/card.jpg"),
+                                image: NetworkImage("https://play-lh.googleusercontent.com/uE-rLPFKIsgq4LWhHBOtkvHimgP8v-nKuqMsEZ4QRr4KZLUkJdJpXi5zx09s1YnsHw=w240-h480-rw"),
                               )),
                           SizedBox(
                             width: 20,
                           ),
                           Text(
-                            "FlasCard",
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          )
-                        ]),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: 60,
-                        decoration: const BoxDecoration(
-                          boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey,
-                                offset: Offset(2,
-                                    2),
-                                blurRadius: 4,
-                                spreadRadius:
-                                    1,
-                              ),
-                            ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        child: const Row(children: [
-                          SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Image(
-                                image: AssetImage("assets/images/card.jpg"),
-                              )),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            "FlasCard",
+                            "Typing Practice",
                             style: TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.bold),
                           )
