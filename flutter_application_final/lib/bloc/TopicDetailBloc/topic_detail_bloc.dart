@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_application_final/model/topic.dart';
+import 'package:flutter_application_final/model/word.dart';
 
 
 part 'topic_detail_event.dart';
@@ -12,6 +13,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
     on<TopicDetailInitialEvent>(_topicDetailInitialEvent);
     on<TopicDetailFlashCardClicklEvent>(_topicDetailFlashCardClicklEvent);
     on<TopicDetailQuizzClicklEvent>(_topicDetailQuizzzClicklEvent);
+    on<TopicDetailStarClicklEvent>(_topicDetailStarClicklEvent);
   }
 
   FutureOr<void> _topicDetailInitialEvent(TopicDetailInitialEvent event, Emitter<TopicDetailState> emit) {
@@ -24,5 +26,10 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
 
   FutureOr<void> _topicDetailQuizzzClicklEvent(TopicDetailQuizzClicklEvent event, Emitter<TopicDetailState> emit) {
     emit(TopicDetailQuizzClicklState(topic: event.topic));
+  }
+
+  FutureOr<void> _topicDetailStarClicklEvent(TopicDetailStarClicklEvent event, Emitter<TopicDetailState> emit) {
+    event.topic.listWords[event.index].isStar = !event.topic.listWords[event.index].isStar;
+    emit(TopicDetailSuccesslState(topic: event.topic));
   }
 }

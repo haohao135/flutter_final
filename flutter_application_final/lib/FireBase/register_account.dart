@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/UI/MainScreen/main_screen.dart';
+import 'package:flutter_application_final/model/archievement.dart';
 import 'package:flutter_application_final/model/user.dart';
+import 'package:flutter_application_final/model/word.dart';
 
 class Register {
   static Future<void> createAccount(
@@ -56,6 +58,61 @@ class Register {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('Wrong password provided for that user.')));
       }
+    }
+  }
+
+  static Future<Users> getUserById(String id) async {
+    final rs =
+        await FirebaseFirestore.instance.collection("users").doc(id).get();
+    final data = rs.data();
+    Users user = Users(id: id, email: data!["email"], name: data["name"]);
+    List<dynamic> list1 = data["archievement"] as List<dynamic>;
+    List<dynamic> list2 = data["listFavouriteWord"] as List<dynamic>;
+    try {
+      if (list1.isNotEmpty) {
+        List<Map<String, dynamic>> t1 = list1.map((e) => e as Map<String, dynamic>).toList();
+        List<Archievement> achieList = t1.map((e) {
+          Archievement archievement =
+              Archievement(e["id"], e["nameTopic"], e["rank"], id);
+          return archievement;
+        }).toList();
+        user.listArchievement.addAll(achieList);
+      }
+      if (list2.isNotEmpty) {
+          List<Map<String, dynamic>> t2 = list2.map((e) => e as Map<String, dynamic>).toList();
+          List<Word> wordList = t2.map((e) {
+            Word word = Word(
+                id: e["id"],
+                term: e["term"],
+                definition: e["definition"],
+                statusE: e["statusE"],
+                isStar: e["isStar"],
+                topicId: e["topicId"]);
+            return word;
+          }).toList();
+          user.listFavouriteWord.addAll(wordList);
+        }
+      return user;
+    } catch (e) {
+      // ignore: avoid_print
+      print("khong lay du lieu dc");
+      // ignore: avoid_print
+      print(e);
+      return user;
+    }
+  }
+
+  static Future<void> updateUser(Users user) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.id)
+          .update(user.toJson());
+    } catch (e) {
+      // ignore: avoid_print
+      print("khong update dc");
+      // ignore: avoid_print
+      print(e);
     }
   }
 }

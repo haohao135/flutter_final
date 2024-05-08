@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_final/UI/FlashCardScreen/flash_card.dart';
-import 'package:flutter_application_final/UI/QuizzScreen/quizz.dart';
+import 'package:flutter_application_final/FireBase/register_account.dart';
+import 'package:flutter_application_final/UI/FlashCardScreen/before_flash_card.dart';
+import 'package:flutter_application_final/UI/QuizzScreen/before_quizz.dart';
 import 'package:flutter_application_final/bloc/TopicDetailBloc/topic_detail_bloc.dart';
 import 'package:flutter_application_final/model/topic.dart';
+import 'package:flutter_application_final/model/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // ignore: must_be_immutable
 class TopicDetail extends StatefulWidget {
@@ -22,6 +25,7 @@ class _TopicDetailState extends State<TopicDetail> {
   FirebaseAuth? firebaseAuth;
   String avatarUrl = "";
   FlutterTts flutterTts = FlutterTts();
+  Users? user;
   @override
   void initState() {
     topicDetailBloc.add(TopicDetailInitialEvent(topic: widget.topic));
@@ -30,6 +34,7 @@ class _TopicDetailState extends State<TopicDetail> {
         firebaseAuth!.currentUser!.photoURL!.isNotEmpty) {
       avatarUrl = firebaseAuth!.currentUser!.photoURL ?? "";
     }
+    //getUser(firebaseAuth!.currentUser!.uid);
     super.initState();
   }
 
@@ -44,15 +49,14 @@ class _TopicDetailState extends State<TopicDetail> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => FlashCard(
-                    currentWord: 1, totalWord: state.total, topic: state.topic),
+                builder: (context) => BeforeFlashCard(topic: state.topic),
               ));
         }
-        if(state is TopicDetailQuizzClicklState){
+        if (state is TopicDetailQuizzClicklState) {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Quizz(topic: state.topic, currentWord: 1, seconds: 0, correctAnswer: 0,)));
+                  builder: (context) => BeforeQuizz(topic: state.topic)));
         }
       },
       builder: (context, state) {
@@ -236,7 +240,8 @@ class _TopicDetailState extends State<TopicDetail> {
                                 height: 40,
                                 width: 40,
                                 child: Image(
-                                  image: AssetImage("assets/images/flash-cards.png"),
+                                  image: AssetImage(
+                                      "assets/images/flash-cards.png"),
                                 )),
                             SizedBox(
                               width: 20,
@@ -254,31 +259,8 @@ class _TopicDetailState extends State<TopicDetail> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0)),
-                              content: const Text(
-                                "Vào trang làm trắc nghiệm?",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              contentPadding: const EdgeInsets.all(30),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("Hủy")),
-                                TextButton(
-                                    onPressed: () {
-                                      topicDetailBloc.add(TopicDetailQuizzClicklEvent(topic: successState.topic));
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("Đồng ý")),
-                              ],
-                            ),
-                          );
+                          topicDetailBloc.add(TopicDetailQuizzClicklEvent(
+                              topic: successState.topic));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(4),
@@ -336,7 +318,8 @@ class _TopicDetailState extends State<TopicDetail> {
                               height: 40,
                               width: 40,
                               child: Image(
-                                image: NetworkImage("https://play-lh.googleusercontent.com/uE-rLPFKIsgq4LWhHBOtkvHimgP8v-nKuqMsEZ4QRr4KZLUkJdJpXi5zx09s1YnsHw=w240-h480-rw"),
+                                image: NetworkImage(
+                                    "https://play-lh.googleusercontent.com/uE-rLPFKIsgq4LWhHBOtkvHimgP8v-nKuqMsEZ4QRr4KZLUkJdJpXi5zx09s1YnsHw=w240-h480-rw"),
                               )),
                           SizedBox(
                             width: 20,
@@ -380,6 +363,7 @@ class _TopicDetailState extends State<TopicDetail> {
                                       fontSize: 20),
                                 ),
                                 Row(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
                                         onPressed: () {
@@ -388,17 +372,42 @@ class _TopicDetailState extends State<TopicDetail> {
                                         },
                                         icon: const Icon(Icons.volume_up)),
                                     IconButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          topicDetailBloc.add(TopicDetailStarClicklEvent(topic: successState
+                                                .topic, index: index));
+                                                print(successState
+                                                .topic.listWords[index].isStar);
+                                        },
                                         icon: successState
                                                 .topic.listWords[index].isStar
                                             ? const Icon(
-                                                Icons.star_border_outlined,
+                                                Icons.star,
                                                 color: Colors.amber,
                                               )
                                             : const Icon(
                                                 Icons.star_border_outlined,
                                                 color: Colors.amber,
-                                              ))
+                                              )),
+                                    IconButton(
+                                        onPressed: () async {
+                                          await getUser(
+                                              firebaseAuth!.currentUser!.uid);
+                                          user!.listFavouriteWord.add(
+                                              successState
+                                                  .topic.listWords[index]);
+                                          await updateUser(user!);
+                                          Fluttertoast.showToast(
+                                              backgroundColor: Colors.teal,
+                                              textColor: Colors.white,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              msg:
+                                                  "Đã thêm vào danh sách yêu thích");
+                                        },
+                                        icon: const Icon(
+                                          Icons.favorite_border_rounded,
+                                          color: Colors.red,
+                                        ))
                                   ],
                                 )
                               ],
@@ -426,5 +435,13 @@ class _TopicDetailState extends State<TopicDetail> {
     await flutterTts.setLanguage('en-US');
     await flutterTts.setPitch(1);
     await flutterTts.speak(text);
+  }
+
+  Future<void> getUser(String id) async {
+    user = await Register.getUserById(id);
+  }
+
+  Future<void> updateUser(Users user) async {
+    await Register.updateUser(user);
   }
 }

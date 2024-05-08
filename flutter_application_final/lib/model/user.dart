@@ -5,20 +5,20 @@ class Users{
   late String id;
   late String email;
   late String name;
-  String? favoriteId;
   late List<Archievement> listArchievement = [];
   late List<Word> listFavouriteWord = [];
 
   Users({required this.id, required this.email, required this.name});
 
   Map<String, dynamic> toJson(){
+    List<Map<String, dynamic>> arJson = listArchievement.map((ar) => ar.toJson()).toList();
+    List<Map<String, dynamic>> wJson = listFavouriteWord.map((word) => word.toJson()).toList();
     return {
       "id": id,
       "email": email,
       "name": name,
-      "favoriteId": favoriteId,
-      "archievement": listArchievement,
-      "listFavouriteWord": listFavouriteWord
+      "archievement": arJson,
+      "listFavouriteWord": wJson
     };
   }
 }
