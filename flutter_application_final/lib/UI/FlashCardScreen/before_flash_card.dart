@@ -27,6 +27,7 @@ class BeforeFlashCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const SizedBox(width: double.infinity,),
           const Text("Học từ vựng theo Flash Card",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ElevatedButton(
@@ -57,8 +58,9 @@ class BeforeFlashCard extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8))),
               onPressed: () {
-                Topic topic2 = newTopic(topic.id, topic.name, topic.listWords, topic.mode, topic.author, topic.userId);
-                if(topic2.listWords.isEmpty){
+                Topic topic2 = newTopic(topic.id, topic.name, topic.listWords,
+                    topic.mode, topic.author, topic.userId);
+                if (topic2.listWords.isEmpty) {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -78,17 +80,16 @@ class BeforeFlashCard extends StatelessWidget {
                       ],
                     ),
                   );
-                } else{
+                } else {
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FlashCard(
-                          currentWord: 1,
-                          totalWord: topic2.listWords.length,
-                          topic: topic2),
-                    ));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FlashCard(
+                            currentWord: 1,
+                            totalWord: topic2.listWords.length,
+                            topic: topic2),
+                      ));
                 }
-                
               },
               child: const Text(
                 "Từ được gắn sao",
@@ -98,16 +99,23 @@ class BeforeFlashCard extends StatelessWidget {
       ),
     );
   }
-  Topic newTopic(String id, String name, List<Word> listWords, bool mode, String? author, String userId){
-    Topic topic = Topic(id: id, name: name, listWords: listWords, mode: mode, author: author, userId: userId);
+
+  Topic newTopic(String id, String name, List<Word> listWords, bool mode,
+      String? author, String userId) {
+    
     List<Word> newListWord = [];
-    for(var i in topic.listWords){
-      if(i.isStar){
+    for (var i in topic.listWords) {
+      if (i.isStar) {
         newListWord.add(i);
       }
     }
-    topic.listWords.clear();
-    topic.listWords.addAll(newListWord);
-    return topic;
+    Topic topic1 = Topic(
+        id: id,
+        name: name,
+        listWords: newListWord,
+        mode: mode,
+        author: author,
+        userId: userId);
+    return topic1;
   }
 }

@@ -25,10 +25,12 @@ class BeforeQuizz extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(
+              width: double.infinity,
+            ),
             const Text("Chọn chế độ bạn muốn",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(
@@ -67,6 +69,7 @@ class BeforeQuizz extends StatelessWidget {
                                             currentWord: 1,
                                             seconds: 0,
                                             correctAnswer: 0,
+                                            answers: [],
                                           )));
                             },
                             child: const Text("Đồng ý")),
@@ -110,6 +113,7 @@ class BeforeQuizz extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Quizz2(
+                                        answers: [],
                                             topic: topic,
                                             currentWord: 1,
                                             seconds: 0,
