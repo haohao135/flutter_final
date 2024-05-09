@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/bloc/TopicDetailBloc/topic_detail_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,9 +20,9 @@ class _HomeState extends State<Home> {
   List<String> tips = [
     'Practice speaking every day to improve your fluency',
     'Read English books or articles to expand your vocabulary',
-    'Tip 3',
-    'Tip 4',
-    'Tip 5',
+    'Test 3',
+    'Test 4',
+    'Test 5',
   ];
 
   List<String> imagePaths = [
@@ -53,16 +52,22 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: const Color.fromARGB(255, 235, 221, 239),
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 163, 45, 206),
+      appBar: AppBar(       
+        elevation: 20.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(40),
+          ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 163, 45, 206),       
         title: const Text(
           "App Name",
-          style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 25),
         ), 
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight + 10.0 ), // Set the preferred height of the widget
+          preferredSize: Size.fromHeight(kToolbarHeight + 30.0 ), // Set the preferred height of the widget
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding:  EdgeInsets.only(bottom: 25,left: 8,right: 8),
             child: SearchAnchor(
               builder: (BuildContext context, SearchController controller) {
                 return SearchBar(
@@ -105,6 +110,7 @@ class _HomeState extends State<Home> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+
               // image slideshow
               SizedBox(
                 height: 180,
@@ -169,7 +175,7 @@ class _HomeState extends State<Home> {
                   itemCount: tips.length,
                   itemBuilder: (BuildContext context, int index){
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(right: 8,top: 8,bottom: 8),
                       child: Container(
                         width: 270, 
                         padding: const EdgeInsets.all(8),
@@ -205,6 +211,7 @@ class _HomeState extends State<Home> {
               ),
               SizedBox(height: 20,),
               
+              // Folders
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -234,7 +241,7 @@ class _HomeState extends State<Home> {
                   itemCount: tips.length,
                   itemBuilder: (BuildContext context, int index){
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(right: 8,top: 8,bottom: 8),
                       child: Container(
                         width: 270, 
                         padding: const EdgeInsets.all(8),
@@ -258,7 +265,6 @@ class _HomeState extends State<Home> {
                           child: Text(
                             tips[index],
                             style: const TextStyle(
-                              
                               color: Colors.black,
                               fontSize: 25,
                             ),
@@ -270,7 +276,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ],
-          ),         
+          ),
         ),
       ),
     );
