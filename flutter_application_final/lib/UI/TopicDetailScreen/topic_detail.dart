@@ -375,8 +375,6 @@ class _TopicDetailState extends State<TopicDetail> {
                                         onPressed: () {
                                           topicDetailBloc.add(TopicDetailStarClicklEvent(topic: successState
                                                 .topic, index: index));
-                                                print(successState
-                                                .topic.listWords[index].isStar);
                                         },
                                         icon: successState
                                                 .topic.listWords[index].isStar

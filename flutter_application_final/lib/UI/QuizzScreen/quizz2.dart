@@ -11,17 +11,19 @@ class Quizz2 extends StatefulWidget {
       required this.topic,
       required this.currentWord,
       required this.seconds,
-      required this.correctAnswer})
+      required this.correctAnswer, required this.answers})
       : super(key: key);
   Topic topic;
   int currentWord;
   int seconds;
   int correctAnswer;
+  List<String> answers = [];
   @override
   State<Quizz2> createState() => _QuizzState();
 }
 
 class _QuizzState extends State<Quizz2> {
+  
   List<String> selectedAnswers = [];
   String correctAnswer = '';
   int borderColor1 = 0, borderColor2 = 0, borderColor3 = 0, borderColor4 = 0;
@@ -137,65 +139,85 @@ class _QuizzState extends State<Quizz2> {
             ),
             GestureDetector(
                 onTap: () {
+                  widget.answers.add(selectedAnswers[0]);
                   if (selectedAnswers[0] == correctAnswer) {
-                    setState(() {
+                    if(mounted){
+                      setState(() {
                       borderColor1 = 1;
                       widget.correctAnswer++;
                       navigate();
                     });
+                    }
                   } else {
-                    setState(() {
+                    if(mounted){
+                      setState(() {
                       borderColor1 = 2;
                       navigate();
                     });
+                    }
                   }
                 },
                 child: answer(selectedAnswers[0], borderColor1)),
             GestureDetector(
                 onTap: () {
+                  widget.answers.add(selectedAnswers[0]);
                   if (selectedAnswers[1] == correctAnswer) {
-                    setState(() {
+                    if(mounted){
+                      setState(() {
                       borderColor2 = 1;
                       widget.correctAnswer++;
                       navigate();
                     });
+                    }
                   } else {
-                    setState(() {
+                    if(mounted){
+                      setState(() {
                       borderColor2 = 2;
                       navigate();
                     });
+                    }
                   }
                 },
                 child: answer(selectedAnswers[1], borderColor2)),
             GestureDetector(
                 onTap: () {
+                  widget.answers.add(selectedAnswers[0]);
                   if (selectedAnswers[2] == correctAnswer) {
-                    setState(() {
+                    if(mounted){
+                      setState(() {
                       borderColor3 = 1;
                       widget.correctAnswer++;
                       navigate();
                     });
+                    }
                   } else {
-                    setState(() {
+                    if(mounted){
+                      setState(() {
                       borderColor3 = 2;
                       navigate();
                     });
+                    }
                   }
                 },
                 child: answer(selectedAnswers[2], borderColor3)),
             GestureDetector(
                 onTap: () {
+                  widget.answers.add(selectedAnswers[0]);
                   if (selectedAnswers[3] == correctAnswer) {
-                    setState(() {
+                    if(mounted){
+                      setState(() {
                       borderColor4 = 1;
                       widget.correctAnswer++;
                       navigate();
                     });
+                    }
                   } else {
-                    setState(() {
+                    if(mounted){
+                      setState(() {
                       borderColor4 = 2;
                       navigate();
                     });
+                    }
                   }
                 },
                 child: answer(selectedAnswers[3], borderColor4))
@@ -242,13 +264,17 @@ class _QuizzState extends State<Quizz2> {
 
   void checkAnswer(String text, int color) {
     if (text == correctAnswer) {
-      setState(() {
+      if(mounted){
+        setState(() {
         color = 1;
       });
+      }
     } else {
-      setState(() {
+      if(mounted){
+        setState(() {
         color = 2;
       });
+      }
     }
   }
 
@@ -258,13 +284,14 @@ class _QuizzState extends State<Quizz2> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const QuizzResult(),
+              builder: (context) => QuizzResult(topic: widget.topic, answers: widget.answers, correctAnswer: widget.correctAnswer, second: widget.seconds),
             ));
       } else {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => Quizz2(
+                answers: widget.answers,
                   topic: widget.topic,
                   currentWord: widget.currentWord + 1,
                   seconds: widget.seconds,
