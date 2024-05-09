@@ -27,11 +27,11 @@ Future<void> checkUserLoggedIn() async {
     runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     home: SafeArea(child: MainPage()),
-  ));
+    ));
   } else {
     runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     home: SafeArea(child: LoginPage()),
-  ));
+    ));
   }
 }

@@ -147,13 +147,15 @@ class _TopicDetailState extends State<TopicDetail> {
                                                 shape: BoxShape.rectangle,
                                                 color: Colors.white),
                                             child: Center(
-                                                child: Text(
-                                              successState
-                                                  .topic.listWords[index].term,
-                                              style: const TextStyle(
+                                              child: Text(
+                                                successState.topic.listWords[index].term,
+                                                style: const TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 25),
-                                            )),
+                                                  fontSize: 25
+                                                ),
+                                              ),
+   
+                                            ),
                                           ),
                                   ));
                             }),
