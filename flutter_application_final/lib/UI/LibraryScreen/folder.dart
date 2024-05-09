@@ -41,10 +41,12 @@ class _FolderListState extends State<FolderList> {
       isLoading = true;
     });
     List<Folder> folderData = await CreateFolderFireBase.getFolderData();
-    setState(() {
-      folders = folderData;
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        folders = folderData;
+        isLoading = false;
+      });
+    }
   }
 
   Widget hasFolder() {

@@ -5,8 +5,8 @@ import 'package:flutter_application_final/UI/QuizzScreen/quizz_result.dart';
 import 'package:flutter_application_final/model/topic.dart';
 
 // ignore: must_be_immutable
-class Quizz extends StatefulWidget {
-  Quizz(
+class Quizz2 extends StatefulWidget {
+  Quizz2(
       {Key? key,
       required this.topic,
       required this.currentWord,
@@ -18,20 +18,20 @@ class Quizz extends StatefulWidget {
   int seconds;
   int correctAnswer;
   @override
-  State<Quizz> createState() => _QuizzState();
+  State<Quizz2> createState() => _QuizzState();
 }
 
-class _QuizzState extends State<Quizz> {
+class _QuizzState extends State<Quizz2> {
   List<String> selectedAnswers = [];
   String correctAnswer = '';
   int borderColor1 = 0, borderColor2 = 0, borderColor3 = 0, borderColor4 = 0;
   int minutes = 0;
   @override
   void initState() {
-    correctAnswer = widget.topic.listWords[widget.currentWord - 1].definition;
+    correctAnswer = widget.topic.listWords[widget.currentWord - 1].term;
     if (widget.topic.listWords.length < 4) {
       for (var i in widget.topic.listWords) {
-        selectedAnswers.add(i.definition);
+        selectedAnswers.add(i.term);
       }
       while (selectedAnswers.length < 4) {
         selectedAnswers.add('');
@@ -40,7 +40,7 @@ class _QuizzState extends State<Quizz> {
     } else {
       List<String> wrongAnswers = [];
       for (var i in widget.topic.listWords) {
-        wrongAnswers.add(i.definition);
+        wrongAnswers.add(i.term);
       }
       wrongAnswers.remove(correctAnswer);
       wrongAnswers.shuffle();
@@ -126,7 +126,7 @@ class _QuizzState extends State<Quizz> {
             ),
             Center(
                 child: Text(
-              widget.topic.listWords[widget.currentWord - 1].term,
+              widget.topic.listWords[widget.currentWord - 1].definition,
               style: const TextStyle(
                   color: Colors.black,
                   fontSize: 40,
@@ -264,7 +264,7 @@ class _QuizzState extends State<Quizz> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => Quizz(
+              builder: (context) => Quizz2(
                   topic: widget.topic,
                   currentWord: widget.currentWord + 1,
                   seconds: widget.seconds,

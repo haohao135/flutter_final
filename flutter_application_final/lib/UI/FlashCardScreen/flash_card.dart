@@ -52,7 +52,7 @@ class _FlashCardState extends State<FlashCard> {
                               totalWord: widget.totalWord,
                               topic: widget.topic)));
                 } else {
-                  for (var i = 0; i < widget.currentWord; i++) {
+                  for (var i = 0; i <= widget.currentWord; i++) {
                     Navigator.pop(context);
                   }
                 }

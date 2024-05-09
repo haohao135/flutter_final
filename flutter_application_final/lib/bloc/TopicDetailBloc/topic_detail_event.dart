@@ -26,4 +26,15 @@ class TopicDetailQuizzClicklEvent extends TopicDetailEvent {
   TopicDetailQuizzClicklEvent({required this.topic});
 }
 
+class TopicDetailFavoriteClicklEvent extends TopicDetailEvent {
+  Word word;
+  TopicDetailFavoriteClicklEvent({required this.word});
+}
+
+class TopicDetailStarClicklEvent extends TopicDetailEvent {
+  Topic topic;
+  int index;
+  TopicDetailStarClicklEvent({required this.topic, required this.index});
+}
+
 class TopicDetailErrorlEvent extends TopicDetailEvent {}

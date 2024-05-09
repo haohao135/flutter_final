@@ -23,3 +23,5 @@ class TopicDetailQuizzClicklState extends TopicDetailActionState{
   Topic topic;
   TopicDetailQuizzClicklState({required this.topic});
 }
+
+class TopicDetailFavoriteClicklState extends TopicDetailState{}
