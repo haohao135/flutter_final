@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_final/UI/TypingPracticsScreen/typing.dart';
+import 'package:flutter_application_final/model/topic.dart';
 
+// ignore: must_be_immutable
 class BeforeTyping extends StatelessWidget {
-  const BeforeTyping({super.key});
-
+  BeforeTyping({super.key, required this.topic});
+  Topic topic;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +59,8 @@ class BeforeTyping extends StatelessWidget {
                             child: const Text("Hủy")),
                         TextButton(
                             onPressed: () {
-                              
+                              Navigator.of(context).pop();
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Typing(topic: topic, currentWord: 1, second: 0,),));
                             },
                             child: const Text("Đồng ý")),
                       ],

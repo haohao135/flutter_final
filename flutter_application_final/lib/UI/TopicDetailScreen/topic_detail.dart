@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_final/FireBase/register_account.dart';
 import 'package:flutter_application_final/UI/FlashCardScreen/before_flash_card.dart';
 import 'package:flutter_application_final/UI/QuizzScreen/before_quizz.dart';
+import 'package:flutter_application_final/UI/TypingPracticsScreen/before_typing.dart';
 import 'package:flutter_application_final/bloc/TopicDetailBloc/topic_detail_bloc.dart';
 import 'package:flutter_application_final/model/topic.dart';
 import 'package:flutter_application_final/model/user.dart';
@@ -57,6 +58,12 @@ class _TopicDetailState extends State<TopicDetail> {
               context,
               MaterialPageRoute(
                   builder: (context) => BeforeQuizz(topic: state.topic)));
+        }
+        if(state is TopicDetailTypingPracticeClicklState){
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BeforeTyping(topic: state.topic)));
         }
       },
       builder: (context, state) {
@@ -300,38 +307,44 @@ class _TopicDetailState extends State<TopicDetail> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        height: 60,
-                        decoration: const BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(2, 2),
-                              blurRadius: 4,
-                              spreadRadius: 1,
-                            ),
-                          ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        child: const Row(children: [
-                          SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Image(
-                                image: NetworkImage(
-                                    "https://play-lh.googleusercontent.com/uE-rLPFKIsgq4LWhHBOtkvHimgP8v-nKuqMsEZ4QRr4KZLUkJdJpXi5zx09s1YnsHw=w240-h480-rw"),
-                              )),
-                          SizedBox(
-                            width: 20,
+                      GestureDetector(
+                        onTap: () {
+                          topicDetailBloc.add(TopicDetailTypingPracticeClicklEvent(
+                              topic: successState.topic));
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          height: 60,
+                          decoration: const BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(2, 2),
+                                blurRadius: 4,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
-                          Text(
-                            "Typing Practice",
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          )
-                        ]),
+                          child: const Row(children: [
+                            SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: Image(
+                                  image: NetworkImage(
+                                      "https://play-lh.googleusercontent.com/uE-rLPFKIsgq4LWhHBOtkvHimgP8v-nKuqMsEZ4QRr4KZLUkJdJpXi5zx09s1YnsHw=w240-h480-rw"),
+                                )),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              "Typing Practice",
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold),
+                            )
+                          ]),
+                        ),
                       ),
                       const SizedBox(
                         height: 20,

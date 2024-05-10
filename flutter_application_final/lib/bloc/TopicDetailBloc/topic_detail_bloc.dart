@@ -14,6 +14,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
     on<TopicDetailFlashCardClicklEvent>(_topicDetailFlashCardClicklEvent);
     on<TopicDetailQuizzClicklEvent>(_topicDetailQuizzzClicklEvent);
     on<TopicDetailStarClicklEvent>(_topicDetailStarClicklEvent);
+    on<TopicDetailTypingPracticeClicklEvent>(_topicDetailTypingPracticeClicklEvent);
   }
 
   FutureOr<void> _topicDetailInitialEvent(TopicDetailInitialEvent event, Emitter<TopicDetailState> emit) {
@@ -31,5 +32,9 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
   FutureOr<void> _topicDetailStarClicklEvent(TopicDetailStarClicklEvent event, Emitter<TopicDetailState> emit) {
     event.topic.listWords[event.index].isStar = !event.topic.listWords[event.index].isStar;
     emit(TopicDetailSuccesslState(topic: event.topic));
+  }
+
+  FutureOr<void> _topicDetailTypingPracticeClicklEvent(TopicDetailTypingPracticeClicklEvent event, Emitter<TopicDetailState> emit) {
+    emit(TopicDetailTypingPracticeClicklState(topic: event.topic));
   }
 }

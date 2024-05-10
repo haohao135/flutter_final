@@ -38,9 +38,9 @@ class _QuizzResultState extends State<QuizzResult2> {
         correctAnswers: widget.correctAnswer,
         date: now,
         duration: widget.second,
-        attempt: 1);
+        attempt: 1, mode: false);
     for (var i in widget.topic.listUserResults) {
-      if (i.userId == FirebaseAuth.instance.currentUser!.uid) {
+      if (i.userId == FirebaseAuth.instance.currentUser!.uid && i.mode == false) {
         userResult.attempt = i.attempt + 1;
         widget.topic.listUserResults.remove(i);
         break;
