@@ -52,4 +52,14 @@ class CreateTopicFireBase {
       return [];
     }
   }
+  static Future<void> updateTopic(Topic topic) async{
+    try{
+      await FirebaseFirestore.instance.collection("topics").doc(topic.id).update(topic.toJson());
+    } catch(e){
+      // ignore: avoid_print
+      print("khong cap nhat topic dc");
+      // ignore: avoid_print
+      print(e);
+    }
+  }
 }

@@ -13,13 +13,14 @@ class Topic{
   Topic({required this.id, required this.name, required this.listWords, required this.mode, required this.author, required this.userId});
   Map<String, dynamic> toJson(){
     List<Map<String, dynamic>> wordsJson = listWords.map((word) => word.toJson()).toList();
+    List<Map<String, dynamic>> userResultJson = listUserResults.map((userReult) => userReult.toJson()).toList();
     return {
       "id": id,
       "userId": userId,
       "name": name,
       "listWords": wordsJson,
       "mode": mode,
-      "listUserResults": listUserResults,
+      "listUserResults": userResultJson,
       "author": author,
       "listFoldersId": listFoldersId
     };

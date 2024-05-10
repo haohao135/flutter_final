@@ -4,7 +4,7 @@ class UserResult {
   int correctAnswers;
   DateTime date;
   int duration;
-  String attempt;
+  int attempt;
   // ignore: non_constant_identifier_names
   UserResult(
       {required this.id,
@@ -13,4 +13,14 @@ class UserResult {
       required this.date,
       required this.duration,
       required this.attempt});
+  Map<String, dynamic> toJson(){
+    return {
+      "id": id,
+      "userId": userId,
+      "correctAnswers": correctAnswers,
+      "date": date,
+      "duration": duration,
+      "attempt": attempt
+    };
+  }
 }

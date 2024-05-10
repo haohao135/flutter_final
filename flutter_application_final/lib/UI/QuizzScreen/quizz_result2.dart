@@ -8,8 +8,8 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:uuid/uuid.dart';
 
 // ignore: must_be_immutable
-class QuizzResult extends StatefulWidget {
-  QuizzResult(
+class QuizzResult2 extends StatefulWidget {
+  QuizzResult2(
       {super.key,
       required this.topic,
       required this.correctAnswer,
@@ -20,10 +20,10 @@ class QuizzResult extends StatefulWidget {
   int second;
   List<String> answers;
   @override
-  State<QuizzResult> createState() => _QuizzResultState();
+  State<QuizzResult2> createState() => _QuizzResultState();
 }
 
-class _QuizzResultState extends State<QuizzResult> {
+class _QuizzResultState extends State<QuizzResult2> {
   int? phantram;
   FlutterTts flutterTts = FlutterTts();
   @override
@@ -338,7 +338,7 @@ class _QuizzResultState extends State<QuizzResult> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Đáp án: ${widget.topic.listWords[index].definition}",
+                              widget.topic.listWords[index].definition,
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(
@@ -348,7 +348,7 @@ class _QuizzResultState extends State<QuizzResult> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  widget.topic.listWords[index].term,
+                                  "Đáp án: ${widget.topic.listWords[index].term}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20),

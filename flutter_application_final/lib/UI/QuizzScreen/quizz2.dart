@@ -1,7 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_application_final/UI/QuizzScreen/quizz_result.dart';
+import 'package:flutter_application_final/UI/QuizzScreen/quizz_result2.dart';
 import 'package:flutter_application_final/model/topic.dart';
 
 // ignore: must_be_immutable
@@ -284,7 +283,11 @@ class _QuizzState extends State<Quizz2> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => QuizzResult(topic: widget.topic, answers: widget.answers, correctAnswer: widget.correctAnswer, second: widget.seconds),
+              builder: (context) => QuizzResult2(
+                  topic: widget.topic,
+                  answers: widget.answers,
+                  correctAnswer: widget.correctAnswer,
+                  second: widget.seconds),
             ));
       } else {
         Navigator.pushReplacement(

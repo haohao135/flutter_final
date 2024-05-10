@@ -1,10 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_final/bloc/TopicDetailBloc/topic_detail_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_application_final/model/topic.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
