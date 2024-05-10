@@ -1,12 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_application_final/UI/TypingPracticsScreen/typing_result.dart';
+import 'package:flutter_application_final/UI/TypingPracticsScreen/typing_result2.dart';
 import 'package:flutter_application_final/model/topic.dart';
 
 // ignore: must_be_immutable
-class Typing extends StatefulWidget {
-  Typing(
+class Typing2 extends StatefulWidget {
+  Typing2(
       {super.key,
       required this.topic,
       required this.currentWord,
@@ -17,10 +16,10 @@ class Typing extends StatefulWidget {
   int correctAnswer;
   List<String> results;
   @override
-  State<Typing> createState() => _TypingState();
+  State<Typing2> createState() => _TypingState();
 }
 
-class _TypingState extends State<Typing> {
+class _TypingState extends State<Typing2> {
   var cl1 = TextEditingController();
   bool er = false;
   bool showProgressIndicator = false;
@@ -86,15 +85,11 @@ class _TypingState extends State<Typing> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // if (showProgressIndicator)
-            //   const Center(
-            //     child: CircularProgressIndicator(),
-            //   ),
             const SizedBox(
               height: 15,
             ),
             const Text(
-              "Nhập nghĩa tiếng Việt: ",
+              "Nhập nghĩa tiếng Anh: ",
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(
@@ -102,7 +97,7 @@ class _TypingState extends State<Typing> {
             ),
             Center(
                 child: Text(
-              widget.topic.listWords[widget.currentWord - 1].term,
+              widget.topic.listWords[widget.currentWord - 1].definition,
               style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             )),
@@ -134,7 +129,7 @@ class _TypingState extends State<Typing> {
                       showProgressIndicator = true;
                     });
                     widget.results.add(cl1.text);
-                    if(cl1.text.toLowerCase() == widget.topic.listWords[widget.currentWord-1].definition.toLowerCase()){
+                    if(cl1.text.toLowerCase() == widget.topic.listWords[widget.currentWord-1].term.toLowerCase()){
                       widget.correctAnswer++;
                     }
                     showProgressIndicator
@@ -197,13 +192,13 @@ class _TypingState extends State<Typing> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => TypingResult(topic: widget.topic, correctAnswer: widget.correctAnswer, results: widget.results, second: widget.second),
+              builder: (context) => TypingResult2(topic: widget.topic, correctAnswer: widget.correctAnswer, results: widget.results, second: widget.second),
             ));
       } else {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => Typing(topic: widget.topic, currentWord: widget.currentWord + 1, second: widget.second, results: widget.results, correctAnswer: widget.correctAnswer,),
+              builder: (context) => Typing2(topic: widget.topic, currentWord: widget.currentWord + 1, second: widget.second, results: widget.results, correctAnswer: widget.correctAnswer,),
             ));
       }
     });

@@ -69,7 +69,5 @@ class _MyProfilePageState extends State<MyProfilePage> {
     await getUser();
     cl1.text = users!.name;
     cl2.text = users!.email;
-    print("${cl1.text} haha");
-    print("${cl2.text} haha");
   }
 }
