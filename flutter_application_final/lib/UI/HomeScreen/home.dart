@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_final/model/folder.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class _HomeState extends State<Home> {
   int currentIndex = 0;
   // Dummy list of tips, replace it with your actual list of tips
   List<String> tips = [
-    'Practice speaking every day to improve your fluency',
+    'bla bla bla',
     'Read English books or articles to expand your vocabulary',
     'Test 3',
     'Test 4',
@@ -173,7 +174,7 @@ class _HomeState extends State<Home> {
                       padding: const EdgeInsets.only(right: 8,top: 8,bottom: 8),
                       child: Container(
                         width: 270, 
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.only(right: 8,top: 10,bottom: 8),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius:BorderRadius.circular(8),
@@ -190,15 +191,70 @@ class _HomeState extends State<Home> {
                             ),
                           ],
                         ),
-                        child: Center(
-                          child: Text(
-                            tips[index],
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 25,
+
+                        child: const Row(
+                          children: [                          
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [ 
+                                  // topic's name
+                                  Text(
+                                    "asdasd",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+
+                                  // number of words
+                                  Text(
+                                    "33 terms",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 112, 112, 112),
+                                      fontSize: 18,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+
+                                  
+                                  // owner's name, avatar
+                                  Row(
+                                    children: [
+                                      Padding(padding: EdgeInsets.only(top: 90)),
+                                      CircleAvatar(
+                                        radius: 10, // Adjust the size of the avatar as needed
+                                        backgroundImage: AssetImage('assets/images/user1.png'),
+                                      ),
+                                      SizedBox(width: 10,),
+                                      Text(
+                                        "Henry Quill",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                                
+                              ),
                             ),
-                          ),
+                            
+                            // Expanded(
+                              
+                            //     child: const Row(
+                                  
+                            //   ),
+                            // ),
+                          ],
                         ),
+
                       ),
                     );
                   },
