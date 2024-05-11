@@ -192,69 +192,62 @@ class _HomeState extends State<Home> {
                           ],
                         ),
 
-                        child: const Row(
-                          children: [                          
-                            SizedBox(width: 10),
+                        child: const Column(                                                   
+                          children: [     
+                            Padding(padding: EdgeInsets.only(top: 10)),
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [ 
-                                  // topic's name
-                                  Text(
-                                    "asdasd",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-
-                                  // number of words
-                                  Text(
-                                    "33 terms",
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 112, 112, 112),
-                                      fontSize: 18,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-
-                                  
-                                  // owner's name, avatar
-                                  Row(
-                                    children: [
-                                      Padding(padding: EdgeInsets.only(top: 90)),
-                                      CircleAvatar(
-                                        radius: 10, // Adjust the size of the avatar as needed
-                                        backgroundImage: AssetImage('assets/images/user1.png'),
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 16, left: 8), // Adjust the left and right padding as needed
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // topic's name
+                                    Text(
+                                      "Tsdasdasdasdasdasddddasdasd",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      SizedBox(width: 10,),
-                                      Text(
-                                        "Henry Quill",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                                
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+
+                                    // number of words
+                                    Text(
+                                      "33 terms",
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 112, 112, 112),
+                                        fontSize: 18,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            
-                            // Expanded(
-                              
-                            //     child: const Row(
-                                  
-                            //   ),
-                            // ),
+
+                            // owner's name, avatar
+                            Row(
+                              children: [
+                                Padding(padding: EdgeInsets.all(5)),
+                                CircleAvatar(
+                                  radius: 15, // Adjust the size of the avatar as needed
+                                  backgroundImage: AssetImage('assets/images/user1.png'),
+                                ),
+                                SizedBox(width: 10,),
+                                Text(
+                                  "Henry Quill",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                  ),
+                                )
+                              ],
+                            )
                           ],
                         ),
-
                       ),
                     );
                   },
@@ -312,14 +305,53 @@ class _HomeState extends State<Home> {
                             ),
                           ],
                         ),
-                        child: Center(
-                          child: Text(
-                            tips[index],
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 25,
+
+                        child: const Column(                                                   
+                          children: [     
+                            Padding(padding: EdgeInsets.only(top: 10)),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 16, left: 8), // Adjust the left and right padding as needed
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.folder_outlined),
+                                    // topic's name
+                                    Text(
+                                      "Tsdasdasddasdasdasdasdasddasddddasdasd",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+
+                            // owner's name, avatar
+                            Row(
+                              children: [
+                                Padding(padding: EdgeInsets.all(5)),
+                                CircleAvatar(
+                                  radius: 15, // Adjust the size of the avatar as needed
+                                  backgroundImage: AssetImage('assets/images/user1.png'),
+                                ),
+                                SizedBox(width: 10,),
+                                Text(
+                                  "Henry Quill",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     );
