@@ -9,7 +9,6 @@ final class CreateTopicActionState extends CreateTopicState {}
 
 final class CreateTopicInitial extends CreateTopicState {
   final List<Object> listTopicDTO = [];
-
 }
 final class CreateTopicError extends CreateTopicState {}
 final class CreateTopicIsLoading extends CreateTopicState {}

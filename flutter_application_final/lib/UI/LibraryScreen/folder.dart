@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/FireBase/create_folder_firebase.dart';
 import 'package:flutter_application_final/UI/CreateFolderScreen/create_folder.dart';
@@ -17,7 +18,13 @@ class _FolderListState extends State<FolderList> {
 
   @override
   void initState() {
-    getData();
+    FirebaseFirestore.instance
+        .collection('folders')
+        .snapshots()
+        .listen((querySnapshot) {
+      getData();
+    });
+    
     super.initState();
   }
 

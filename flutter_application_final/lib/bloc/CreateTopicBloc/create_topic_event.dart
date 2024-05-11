@@ -5,6 +5,10 @@ sealed class CreateTopicEvent{
 }
 
 class CreateTopicEventInitial extends CreateTopicEvent{}
+class UpdateTopicEventInitial extends CreateTopicEvent{
+  late int count;
+  UpdateTopicEventInitial({required this.count});
+}
 
 // ignore: must_be_immutable
 class ClickFloattingButtonEvent extends CreateTopicEvent{

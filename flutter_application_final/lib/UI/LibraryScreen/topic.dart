@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/FireBase/create_topic_firebase.dart';
 import 'package:flutter_application_final/UI/CreateTopicScreen/create_topic.dart';
@@ -21,19 +22,31 @@ class _TopicListState extends State<TopicList> {
 
   @override
   void initState() {
-    initializeData();
+    FirebaseFirestore.instance
+        .collection('topics')
+        .snapshots()
+        .listen((querySnapshot) {
+      initializeData();
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return BlocConsumer<TopicManagerBloc, TopicManagerState>(
       bloc: topicManagerBloc,
       listenWhen: (previous, current) => current is TopicManagerActionState,
       buildWhen: (previous, current) => current is! TopicManagerActionState,
       listener: (context, state) {
-        if(state is DetailTopicManagerEventClickState){
-          Navigator.push(context, MaterialPageRoute(builder: (context) =>TopicDetail(topic: state.topic,),));
+        if (state is DetailTopicManagerEventClickState) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TopicDetail(
+                  topic: state.topic,
+                ),
+              ));
         }
       },
       builder: (context, state) {
@@ -48,8 +61,9 @@ class _TopicListState extends State<TopicList> {
                 endIndent: 20,
               ),
               itemCount: successState.topicList.length,
-              itemBuilder: (context, index) =>
-                  lisTileCustom(topic: successState.topicList[index], topicManagerBloc: topicManagerBloc),
+              itemBuilder: (context, index) => lisTileCustom(
+                  topic: successState.topicList[index],
+                  topicManagerBloc: topicManagerBloc),
             );
           case TopicManagerLoadingState:
             return const Center(
@@ -121,9 +135,10 @@ class _TopicListState extends State<TopicList> {
     );
   }
 
-  Widget lisTileCustom({required Topic topic, required TopicManagerBloc topicManagerBloc}) {
+  Widget lisTileCustom(
+      {required Topic topic, required TopicManagerBloc topicManagerBloc}) {
     return ListTile(
-      onTap: (){
+      onTap: () {
         topicManagerBloc.add(DetailTopicManagerEventClickEvent(topic: topic));
       },
       leading: const Icon(
@@ -131,9 +146,7 @@ class _TopicListState extends State<TopicList> {
         color: Colors.amber,
       ),
       title: Text(topic.name),
-      trailing: IconButton(onPressed: (){
-
-      }, icon: const Icon(Icons.more_vert)),
+      trailing: IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
     );
   }
 }
