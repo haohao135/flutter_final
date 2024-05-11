@@ -10,6 +10,7 @@ class CreateTopicBloc extends Bloc<CreateTopicEvent, CreateTopicState> {
     on<ClickFloattingButtonEvent>(_clickFloattingButtonEvent);
     on<ClickCompleteButtonEvent>(_clickCompleteButtonEvent);
     on<ClickScanDocumentButtonEvent>(_clickScanDocumentButtonEvent);
+    on<UpdateTopicEventInitial>(_updateTopicEventInitial);
     on<Error>(_error);
   }
 
@@ -34,5 +35,9 @@ class CreateTopicBloc extends Bloc<CreateTopicEvent, CreateTopicState> {
 
   FutureOr<void> _error(Error event, Emitter<CreateTopicState> emit) {
     emit(CreateTopicError());
+  }
+
+  FutureOr<void> _updateTopicEventInitial(UpdateTopicEventInitial event, Emitter<CreateTopicState> emit) {
+    emit(CreateTopicIsSuccess(count: event.count));
   }
 }

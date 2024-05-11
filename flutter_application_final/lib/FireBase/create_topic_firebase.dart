@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_final/FireBase/create_word_firebase.dart';
 import 'package:flutter_application_final/model/topic.dart';
 import 'package:flutter_application_final/model/word.dart';
 
 class CreateTopicFireBase {
   static Future<void> createTopic(Topic topic) async {
-    await FirebaseFirestore.instance.collection("topics").add(topic.toJson());
+    await FirebaseFirestore.instance.collection("topics").doc(topic.id).set(topic.toJson());
   }
 
   static Future<List<Topic>> getTopicData() async {
@@ -58,6 +59,19 @@ class CreateTopicFireBase {
     } catch(e){
       // ignore: avoid_print
       print("khong cap nhat topic dc");
+      // ignore: avoid_print
+      print(e);
+    }
+  }
+  static Future<void> deleteTopic(Topic topic)async{
+    try{
+      for(var i in topic.listWords){
+        CreateWordFirebase.deleteWord(i);
+      }
+      await FirebaseFirestore.instance.collection("topics").doc(topic.id).delete();
+    } catch(e){
+      // ignore: avoid_print
+      print("khong xoa topic dc");
       // ignore: avoid_print
       print(e);
     }
