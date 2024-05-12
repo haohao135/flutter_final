@@ -47,9 +47,10 @@ class CreateFolderFireBase {
   static Future<void> updateFolder(Folder folder) async{
     try{
       await FirebaseFirestore.instance.collection("folders").doc(folder.id).update(folder.toJson());
+      print("cap nhat folder dc");
     } catch(e){
       // ignore: avoid_print
-      print("khong cap nhat topic dc");
+      print("khong cap nhat folder dc");
       // ignore: avoid_print
       print(e);
     }

@@ -105,8 +105,6 @@ class _HomeState extends State<Home> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-
-              // image slideshow
               SizedBox(
                 height: 180,
                 child:GestureDetector(

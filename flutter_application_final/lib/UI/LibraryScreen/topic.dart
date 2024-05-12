@@ -71,7 +71,7 @@ class _TopicListState extends State<TopicList> {
                         topicManagerBloc: topicManagerBloc),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return Container();
                       } else if (snapshot.hasError) {
                         return Text('Lỗi: ${snapshot.error}');
                       } else {
@@ -194,15 +194,17 @@ class _TopicListState extends State<TopicList> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          topic.name,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Text(
+                            topic.name,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
                         ),
                         PopupMenuButton(
                           onSelected: (value) {

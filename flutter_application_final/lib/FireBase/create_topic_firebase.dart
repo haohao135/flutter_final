@@ -6,7 +6,10 @@ import 'package:flutter_application_final/model/word.dart';
 
 class CreateTopicFireBase {
   static Future<void> createTopic(Topic topic) async {
-    await FirebaseFirestore.instance.collection("topics").doc(topic.id).set(topic.toJson());
+    await FirebaseFirestore.instance
+        .collection("topics")
+        .doc(topic.id)
+        .set(topic.toJson());
   }
 
   static Future<List<Topic>> getTopicData() async {
@@ -19,8 +22,7 @@ class CreateTopicFireBase {
           String currentUserId = FirebaseAuth.instance.currentUser!.uid;
           Map<String, dynamic> data = i.data() as Map<String, dynamic>;
           if (currentUserId == i["userId"]) {
-            List<dynamic> list =
-                data["listWords"] as List<dynamic>;
+            List<dynamic> list = data["listWords"] as List<dynamic>;
             List<Map<String, dynamic>> convertedWordList =
                 list.map((e) => e as Map<String, dynamic>).toList();
             List<Word> wordList = convertedWordList.map((e) {
@@ -53,10 +55,14 @@ class CreateTopicFireBase {
       return [];
     }
   }
-  static Future<void> updateTopic(Topic topic) async{
-    try{
-      await FirebaseFirestore.instance.collection("topics").doc(topic.id).update(topic.toJson());
-    } catch(e){
+
+  static Future<void> updateTopic(Topic topic) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("topics")
+          .doc(topic.id)
+          .update(topic.toJson());
+    } catch (e) {
       // ignore: avoid_print
       print("khong cap nhat topic dc");
       // ignore: avoid_print
@@ -73,8 +79,7 @@ class CreateTopicFireBase {
         for (var i in querySnapshot.docs) {
           Map<String, dynamic> data = i.data() as Map<String, dynamic>;
           if (i["mode"] == false) {
-            List<dynamic> list =
-                data["listWords"] as List<dynamic>;
+            List<dynamic> list = data["listWords"] as List<dynamic>;
             List<Map<String, dynamic>> convertedWordList =
                 list.map((e) => e as Map<String, dynamic>).toList();
             List<Word> wordList = convertedWordList.map((e) {
@@ -107,17 +112,60 @@ class CreateTopicFireBase {
       return [];
     }
   }
-  static Future<void> deleteTopic(Topic topic)async{
-    try{
-      for(var i in topic.listWords){
+
+  static Future<void> deleteTopic(Topic topic) async {
+    try {
+      for (var i in topic.listWords) {
         CreateWordFirebase.deleteWord(i);
       }
-      await FirebaseFirestore.instance.collection("topics").doc(topic.id).delete();
-    } catch(e){
+      await FirebaseFirestore.instance
+          .collection("topics")
+          .doc(topic.id)
+          .delete();
+    } catch (e) {
       // ignore: avoid_print
       print("khong xoa topic dc");
       // ignore: avoid_print
       print(e);
+    }
+  }
+
+  static Future<Topic> getTopicByTopicId(String id) async {
+    final rs =
+        await FirebaseFirestore.instance.collection("topics").doc(id).get();
+    final data = rs.data();
+    Topic? topic;
+    try {
+      if (data != null) {
+        List<dynamic> list = data["listWords"] as List<dynamic>;
+        List<Map<String, dynamic>> convertedWordList =
+            list.map((e) => e as Map<String, dynamic>).toList();
+        List<Word> wordList = convertedWordList.map((e) {
+          Word word = Word(
+              id: e["id"],
+              term: e["term"],
+              definition: e["definition"],
+              statusE: e["statusE"],
+              isStar: e["isStar"],
+              topicId: e["topicId"]);
+          return word;
+        }).toList();
+        topic = Topic(
+            id: data["id"],
+            name: data["name"],
+            listWords: wordList,
+            mode: data["mode"],
+            author: data["author"],
+            userId: data["userId"]);
+        return topic;
+      }
+      throw Exception("Không tìm thấy dữ liệu");
+    } catch (e) {
+      // ignore: avoid_print
+      print("khong lay topic dc");
+      // ignore: avoid_print
+      print(e);
+      return topic as Topic;
     }
   }
 }
