@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_final/model/folder.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -201,7 +200,6 @@ class _HomeState extends State<Home> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // topic's name
                                     Text(
                                       "Tsdasdasdasdasdasddddasdasd",
                                       style: TextStyle(
@@ -301,11 +299,10 @@ class _HomeState extends State<Home> {
                               color: Colors.grey.withOpacity(0.5),
                               spreadRadius: 1,
                               blurRadius: 3,
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
-
                         child: const Column(                                                   
                           children: [     
                             Padding(padding: EdgeInsets.only(top: 10)),
@@ -316,7 +313,6 @@ class _HomeState extends State<Home> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Icon(Icons.folder_outlined),
-                                    // topic's name
                                     Text(
                                       "Tsdasdasddasdasdasdasdasddasddddasdasd",
                                       style: TextStyle(
@@ -327,19 +323,16 @@ class _HomeState extends State<Home> {
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-
                                   ],
                                 ),
                               ),
                             ),
-
-                            // owner's name, avatar
                             Row(
                               children: [
                                 Padding(padding: EdgeInsets.all(5)),
                                 CircleAvatar(
-                                  radius: 15, // Adjust the size of the avatar as needed
-                                  backgroundImage: AssetImage('assets/images/user1.png'),
+                                  radius: 15,
+                                  backgroundImage: AssetImage('assets/images/user1.png'),                                 
                                 ),
                                 SizedBox(width: 10,),
                                 Text(
