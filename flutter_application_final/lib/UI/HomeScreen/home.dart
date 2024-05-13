@@ -47,7 +47,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: const Color.fromARGB(255, 235, 221, 239),
       appBar: AppBar(       
         elevation: 20.0,
         shape: RoundedRectangleBorder(
@@ -60,6 +59,7 @@ class _HomeState extends State<Home> {
           "App Name",
           style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 25),
         ), 
+        // search bar
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight + 30.0 ), // Set the preferred height of the widget
           child: Padding(
