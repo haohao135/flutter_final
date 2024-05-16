@@ -32,7 +32,7 @@ class _TopicDetailState extends State<TopicDetail> {
   FlutterTts flutterTts = FlutterTts();
   Users? user;
   List<Folder>? folders = [];
-  List<String> popUpItem = ["Thêm vào thư mục"];
+  List<String> popUpItem = ["Thêm vào thư mục", "Xem bảng xếp hạng"];
   @override
   void initState() {
     topicDetailBloc.add(TopicDetailInitialEvent(topic: widget.topic));
@@ -497,9 +497,12 @@ class _TopicDetailState extends State<TopicDetail> {
                                           onPressed: () async {
                                             await getUser(
                                                 firebaseAuth!.currentUser!.uid);
-                                            user!.listFavouriteWord.add(
+                                            bool a = user!.listFavouriteWord.any((element) => element.term == successState.topic.listWords[index].term);
+                                            if(!a){
+                                              user!.listFavouriteWord.add(
                                                 successState
                                                     .topic.listWords[index]);
+                                            }
                                             await updateUser(user!);
                                             Fluttertoast.showToast(
                                                 backgroundColor: Colors.teal,
