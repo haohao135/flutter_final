@@ -1,5 +1,17 @@
 import 'dart:async';
+import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_application_final/FireBase/create_folder_firebase.dart';
+import 'package:flutter_application_final/FireBase/create_topic_firebase.dart';
+import 'package:flutter_application_final/FireBase/register_account.dart';
+import 'package:flutter_application_final/UI/LibraryScreen/library.dart';
+import 'package:flutter_application_final/UI/LibraryScreen/topic.dart';
+import 'package:flutter_application_final/bloc/TopicManageBloc/topic_manager_bloc.dart';
+import 'package:flutter_application_final/model/folder.dart';
+import 'package:flutter_application_final/model/topic.dart';
+import 'package:flutter_application_final/model/user.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -10,16 +22,17 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var scrollController = ScrollController();
+  var author = TextEditingValue();
   int currentIndex = 0;
-  // Dummy list of tips, replace it with your actual list of tips
-  List<String> tips = [
-    'bla bla bla',
-    'Read English books or articles to expand your vocabulary',
-    'Test 3',
-    'Test 4',
-    'Test 5',
-  ];
-
+  int num=0;
+  bool isHasTopic = false;
+  List<Topic>? topicList;
+  List<Folder>? folders = [];
+  // String? _email;
+  FirebaseAuth? firebaseAuth =FirebaseAuth.instance;
+  
+  
+  final TopicManagerBloc topicManagerBloc = TopicManagerBloc();
   List<String> imagePaths = [
     'assets/images/slide1.png',
     'assets/images/slide2.png',
@@ -30,8 +43,53 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    FirebaseFirestore.instance
+        .collection('topics')
+        .snapshots()
+        .listen((querySnapshot) {
+      initializeData();
+    });
+    FirebaseFirestore.instance
+        .collection('folders')
+        .snapshots()
+        .listen((querySnapshot) {
+      userFolders();
+    });
     super.initState();
     startTimer();
+  }
+
+  Future<void> getData(TopicManagerBloc bloc) async {
+    bloc.add(LoadingTopicManagerEvent());
+    List<Topic> li = await CreateTopicFireBase.getTopicDataPublic();
+    setState(() {
+      topicList = li;
+    });
+  }
+  Future<void> getFolders() async {
+    List<Folder> foldersss = await CreateFolderFireBase.getFolderData();
+    setState(() {
+      folders!.addAll(foldersss);
+    });
+  }
+
+  void initializeData() async {
+    await getData(topicManagerBloc);
+    // await Register.getUserById();
+    if (topicList != null && topicList!.isNotEmpty) {
+      isHasTopic = true;
+      topicManagerBloc.add(
+          InitialTopicManagerEvent(hasTopic: isHasTopic, topicList: topicList));
+    } else {
+      topicManagerBloc.add(InitialTopicManagerEvent(hasTopic: isHasTopic));
+    }
+  }
+
+  void userFolders()async{
+    List<Folder> folderData = await CreateFolderFireBase.getFolderData();
+    setState(() {
+      folders = folderData;
+    });
   }
 
   int startTimer() {
@@ -42,9 +100,18 @@ class _HomeState extends State<Home> {
     });
     return currentIndex;
   }
-  
+
+  void navigateToLibary(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => LibraryPage()),
+  );
+}
   @override
   Widget build(BuildContext context) {
+    // log("WHY THE HELL WE HAVE "+folders!.length.toString()+" FOLDERS");
+    // log("Current user is "+firebaseAuth!.currentUser!.email.toString());
+    // log("we got "+userFolders().toString());
     return Scaffold(
       appBar: AppBar(       
         elevation: 20.0,
@@ -100,11 +167,13 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
+      
       body: Padding(
         padding: EdgeInsets.all(12.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
+              // image slideshow
               SizedBox(
                 height: 180,
                 child:GestureDetector(
@@ -153,7 +222,7 @@ class _HomeState extends State<Home> {
                       ),
                       foregroundColor: Colors.blue,
                     ),
-                    onPressed: () {},
+                    onPressed: () => navigateToLibary(context),
                     child: const Text(
                       'View all',
                     ),
@@ -165,8 +234,9 @@ class _HomeState extends State<Home> {
                 child: ListView.builder(         
                   controller: scrollController,
                   scrollDirection: Axis.horizontal,
-                  itemCount: tips.length,
+                  itemCount: topicList?.length ?? 0,
                   itemBuilder: (BuildContext context, int index){
+                    final topic = topicList?[index];
                     return Padding(
                       padding: const EdgeInsets.only(right: 8,top: 8,bottom: 8),
                       child: Container(
@@ -188,61 +258,71 @@ class _HomeState extends State<Home> {
                             ),
                           ],
                         ),
-
-                        child: const Column(                                                   
-                          children: [     
-                            Padding(padding: EdgeInsets.only(top: 10)),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 16, left: 8), // Adjust the left and right padding as needed
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Tsdasdasdasdasdasddddasdasd",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                        child: Padding(    
+                          padding: const EdgeInsets.all(12.0),  
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [     
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0), // Adjust the left and right padding as needed
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              topic!.name,
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
 
-                                    // number of words
-                                    Text(
-                                      "33 terms",
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 112, 112, 112),
-                                        fontSize: 18,
+                                      // number of words
+                                      Text(
+                                        "${topic.listWords.length} từ vựng",
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 112, 112, 112),
+                                          fontSize: 18,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
 
-                            // owner's name, avatar
-                            Row(
-                              children: [
-                                Padding(padding: EdgeInsets.all(5)),
-                                CircleAvatar(
-                                  radius: 15, // Adjust the size of the avatar as needed
-                                  backgroundImage: AssetImage('assets/images/user1.png'),
-                                ),
-                                SizedBox(width: 10,),
-                                Text(
-                                  "Henry Quill",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
+                              // owner's name, avatar
+                              Row(
+                                children: [   
+                                  const Padding(padding: EdgeInsets.all(5)),
+                                  CircleAvatar(
+                                    radius: 15, // Adjust the size of the avatar as needed
+                                    backgroundImage: AssetImage('assets/images/user1.png'),
                                   ),
-                                )
-                              ],
-                            )
-                          ],
+                                  SizedBox(width: 10,),
+                                  Text(
+                                    topic.author.toString(),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),                                             
+                          
                         ),
                       ),
                     );
@@ -268,84 +348,96 @@ class _HomeState extends State<Home> {
                       textStyle: const TextStyle(fontSize: 20),
                       foregroundColor: Colors.blue,
                     ),
-                    onPressed: () {},
+                    onPressed: () => navigateToLibary(context),
                     child: const Text('View all'),
                   ),
                 ],
               ),
               SizedBox(
                 height: 180,
-                child: ListView.builder(         
+                child: ListView.builder(                         
                   controller: scrollController,
                   scrollDirection: Axis.horizontal,
-                  itemCount: tips.length,
+                  itemCount:folders!.length,
                   itemBuilder: (BuildContext context, int index){
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8,top: 8,bottom: 8),
-                      child: Container(
-                        width: 270, 
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:BorderRadius.circular(8),
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 0.7,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 3,
-                              offset: const Offset(0, 3),
+                    switch(folders!.length){
+                      case 0:
+                        return noFolders();
+                      default:
+                        return Padding(
+                        padding: const EdgeInsets.only(right: 8,top: 8,bottom: 8),
+                        child: Container(
+                          width: 270, 
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 0.7,
                             ),
-                          ],
-                        ),
-                        child: const Column(                                                   
-                          children: [     
-                            Padding(padding: EdgeInsets.only(top: 10)),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 16, left: 8), // Adjust the left and right padding as needed
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.folder_outlined),
-                                    Text(
-                                      "Tsdasdasddasdasdasdasdasddasddddasdasd",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 3,
+                                offset: const Offset(0, 3),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Padding(padding: EdgeInsets.all(5)),
-                                CircleAvatar(
-                                  radius: 15,
-                                  backgroundImage: AssetImage('assets/images/user1.png'),                                 
-                                ),
-                                SizedBox(width: 10,),
-                                Text(
-                                  "Henry Quill",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
+                            ],
+                          ),
+                          child: Padding(    
+                            padding: const EdgeInsets.all(12.0),  
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [     
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0), // Adjust the left and right padding as needed
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.folder_outlined),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,                                     
+                                          children: [
+                                            Expanded(
+                                              child: 
+                                                Text(
+                                                  folders![index].name,
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                ),
+
+                                // owner's name, avatar
+                                Row(
+                                  children: [   
+                                    const Padding(padding: EdgeInsets.all(5)),
+                                    CircleAvatar(
+                                      radius: 15, // Adjust the size of the avatar as needed
+                                      backgroundImage: AssetImage('assets/images/user1.png'),
+                                    ),
+                                    SizedBox(width: 10,),
+                                    buildEmail(User),
+                                  ],
                                 )
                               ],
-                            )
-                          ],
+                            ),                                              
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   },
                 ),
               ),
@@ -353,6 +445,61 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget noFolders(){
+    return Padding(
+      padding: const EdgeInsets.only(right: 8,top: 8,bottom: 8),
+      child: Container(
+        height: 180,
+        width: 365,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius:BorderRadius.circular(8),
+          border: Border.all(
+            color: Colors.grey,
+            width: 0.7,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Padding(    
+          padding: const EdgeInsets.all(12.0),  
+          child: Center(
+            child: Text(
+              "You haven't got any folder yet",
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  Widget buildEmail(Type user) {
+    return Column(
+      children: [
+        Text(
+          firebaseAuth!.currentUser!.email.toString(),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+          ),
+        )
+      ],
     );
   }
 }

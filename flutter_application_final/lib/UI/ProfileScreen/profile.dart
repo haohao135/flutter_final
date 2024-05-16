@@ -118,16 +118,16 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget buildName(Type user) => Column(
-        children: [
-          Text(
-            '$_name',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            '$_email',
-            style: const TextStyle(color: Colors.grey),
-          )
-        ],
-      );
+    children: [
+      Text(
+        '$_name',
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+      ),
+      const SizedBox(height: 4),
+      Text(
+        '$_email',
+        style: const TextStyle(color: Colors.grey),
+      )
+    ],
+  );
 }

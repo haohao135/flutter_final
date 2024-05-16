@@ -44,6 +44,7 @@ class CreateFolderFireBase {
       return [];
     }
   }
+  
   static Future<void> updateFolder(Folder folder) async{
     try{
       await FirebaseFirestore.instance.collection("folders").doc(folder.id).update(folder.toJson());
