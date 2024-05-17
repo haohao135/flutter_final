@@ -9,6 +9,9 @@ import 'package:flutter_application_final/bloc/TopicManageBloc/topic_manager_blo
 import 'package:flutter_application_final/model/folder.dart';
 import 'package:flutter_application_final/model/topic.dart';
 
+import '../FolderDetail/folder_detail.dart';
+import '../TopicDetailScreen/topic_detail.dart';
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -232,103 +235,111 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ],
-              ),
-              
+              ),             
               SizedBox(   
                 height: 180,
-                child: ListView.builder(   
-                        
+                child: ListView.builder(                           
                   controller: scrollController,
                   scrollDirection: Axis.horizontal,
                   itemCount: topicList?.length ?? 0,
                   itemBuilder: (BuildContext context, int index){
                     final topic = topicList?[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8,top: 8,bottom: 8),
-                      child: Container(
-                        width: 270, 
-                        padding: const EdgeInsets.only(right: 8,top: 10,bottom: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:BorderRadius.circular(8),
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 0.7,
+                    return GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TopicDetail(
+                            topic: topic,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 3,
-                              offset: Offset(0, 3),
+                        )
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8,top: 8,bottom: 8),
+                        child: Container(
+                          width: 270, 
+                          padding: const EdgeInsets.only(right: 8,top: 10,bottom: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 0.7,
                             ),
-                          ],
-                        ),
-                        child: Padding(    
-                          padding: const EdgeInsets.all(12.0),  
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [     
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0), // Adjust the left and right padding as needed
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              topic!.name,
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 3,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Padding(    
+                            padding: const EdgeInsets.all(12.0),  
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [     
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0), // Adjust the left and right padding as needed
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                topic!.name,
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                          ),
-                                        ],
-                                      ),
-
-                                      // number of words
-                                      Text(
-                                        "${topic.listWords.length} từ vựng",
-                                        style: TextStyle(
-                                          color: Color.fromARGB(255, 112, 112, 112),
-                                          fontSize: 18,
+                                          ],
                                         ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
+                      
+                                        // number of words
+                                        Text(
+                                          "${topic.listWords.length} từ vựng",
+                                          style: TextStyle(
+                                            color: Color.fromARGB(255, 112, 112, 112),
+                                            fontSize: 18,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-
-                              // owner's name, avatar
-                              Row(
-                                children: [   
-                                  const Padding(padding: EdgeInsets.all(5)),
-                                  CircleAvatar(
-                                    radius: 15, // Adjust the size of the avatar as needed
-                                    backgroundImage: AssetImage('assets/images/user1.png'),
-                                  ),
-                                  SizedBox(width: 10,),
-                                  Text(
-                                    topic.author.toString(),
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
+                      
+                                // owner's name, avatar
+                                Row(
+                                  children: [   
+                                    const Padding(padding: EdgeInsets.all(5)),
+                                    CircleAvatar(
+                                      radius: 15, // Adjust the size of the avatar as needed
+                                      backgroundImage: AssetImage('assets/images/user1.png'),
                                     ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),                                             
-                          
+                                    SizedBox(width: 10,),
+                                    Text(
+                                      topic.author.toString(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),                                             
+                            
+                          ),
                         ),
                       ),
                     );
@@ -370,79 +381,90 @@ class _HomeState extends State<Home> {
                       case 0:
                         return noFolders();
                       default:
-                        return Padding(
-                        padding: const EdgeInsets.only(right: 8,top: 8,bottom: 8),
-                        child: Container(
-                          width: 270, 
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:BorderRadius.circular(8),
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 0.7,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 1,
-                                blurRadius: 3,
-                                offset: const Offset(0, 3),
+                        final folder = folders![index];
+                        return GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FolderDetail(
+                                folder: folder,
                               ),
-                            ],
+                            )
                           ),
-                          child: Padding(    
-                            padding: const EdgeInsets.all(12.0),  
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [     
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0), // Adjust the left and right padding as needed
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Icon(Icons.folder_outlined),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,                                     
-                                          children: [
-                                            Expanded(
-                                              child: 
-                                                Text(
-                                                  folders![index].name,
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
+                          child: Padding(
+                          padding: const EdgeInsets.only(right: 8,top: 8,bottom: 8),
+                          child: Container(
+                            width: 270, 
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:BorderRadius.circular(8),
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 0.7,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 1,
+                                  blurRadius: 3,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Padding(    
+                              padding: const EdgeInsets.all(12.0),  
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [     
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0), // Adjust the left and right padding as needed
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Icon(Icons.folder_outlined),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,                                     
+                                            children: [
+                                              Expanded(
+                                                child: 
+                                                  Text(
+                                                    folders![index].name,
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
                                                   ),
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-
-                                // owner's name, avatar
-                                Row(
-                                  children: [   
-                                    const Padding(padding: EdgeInsets.all(5)),
-                                    CircleAvatar(
-                                      radius: 15, // Adjust the size of the avatar as needed
-                                      backgroundImage: AssetImage('assets/images/user1.png'),
-                                    ),
-                                    SizedBox(width: 10,),
-                                    buildEmail(User),
-                                  ],
-                                )
-                              ],
-                            ),                                              
+                          
+                                  // owner's name, avatar
+                                  Row(
+                                    children: [   
+                                      const Padding(padding: EdgeInsets.all(5)),
+                                      CircleAvatar(
+                                        radius: 15, // Adjust the size of the avatar as needed
+                                        backgroundImage: AssetImage('assets/images/user1.png'),
+                                      ),
+                                      SizedBox(width: 10,),
+                                      buildEmail(User),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      );
+                                                ),
+                        );
                     }
                   },
                 ),
