@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/UI/LoginScreen/login.dart';
-import 'package:flutter_application_final/UI/ProfileScreen/constants.dart';
+import 'package:flutter_application_final/UI/ProfileScreen/achive.dart';
+import 'package:flutter_application_final/UI/ProfileScreen/widget/constants.dart';
 import 'package:flutter_application_final/UI/ProfileScreen/my_profile.dart';
-import 'package:flutter_application_final/UI/ProfileScreen/profile_widget.dart';
+import 'package:flutter_application_final/UI/ProfileScreen/widget/profile_widget.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -24,6 +25,13 @@ void navigateToMyProfile(BuildContext context) {
   Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => const MyProfilePage()),
+  );
+}
+
+void navigateToAchievement(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => AchievementPage()),
   );
 }
 
@@ -55,6 +63,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 163, 45, 206),
+        title: const Text(
+          "Hồ sơ",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       body: Expanded(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -88,22 +104,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     ProfileWidget(
                       icon: Icons.person,
-                      title: 'My Profile',
+                      title: 'Thông tin',
                       onTap: () => navigateToMyProfile(context),
                     ),
                     ProfileWidget(
-                      icon: Icons.settings,
-                      title: 'Settings',
-                      onTap: () {},
-                    ),
-                    ProfileWidget(
                       icon: Icons.notifications,
-                      title: 'Notifications',
-                      onTap: () {},
+                      title: 'Thành tựu',
+                      onTap: () => navigateToAchievement(context),
                     ),
                     ProfileWidget(
                       icon: Icons.logout,
-                      title: 'Log Out',
+                      title: 'Đăng xuất',
                       onTap: () => handleLogout(
                           context), // Gọi hàm handleLogout khi người dùng nhấn vào nút Log Out
                     ),
