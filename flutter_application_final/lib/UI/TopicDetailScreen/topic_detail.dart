@@ -15,6 +15,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../TopicRankingScreen/topic_ranking.dart';
+
 // ignore: must_be_immutable
 class TopicDetail extends StatefulWidget {
   TopicDetail({super.key, required this.topic});
@@ -78,6 +80,15 @@ class _TopicDetailState extends State<TopicDetail> {
         if (state is TopicDetailUpdateClicklState) {
           updateTopic(state.topic);
         }
+
+        if (state is TopicDetailResultUserClicklState) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TopicRanking(topic: state.topic),
+            ),
+          );
+        }
       },
       builder: (context, state) {
         switch (state.runtimeType) {
@@ -105,6 +116,9 @@ class _TopicDetailState extends State<TopicDetail> {
                     onSelected: (value) {
                       if (value == "Thêm vào thư mục") {
                         showFolderSelectionDialog(context);
+                      }
+                      if (value == "Xem bảng xếp hạng") {
+                        topicDetailBloc.add(TopicDetailResultUserClicklEvent(topic: widget.topic));
                       }
                       if (value == "Sửa chủ đề") {
                         topicDetailBloc.add(
@@ -202,6 +216,8 @@ class _TopicDetailState extends State<TopicDetail> {
                                               style: const TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 25),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             )),
                                           )
                                         : Container(
@@ -233,12 +249,17 @@ class _TopicDetailState extends State<TopicDetail> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            successState.topic.name,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold),
+                          Expanded(
+                            child: Text(
+                              successState.topic.name,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           IconButton(
                               onPressed: () {},
@@ -440,9 +461,11 @@ class _TopicDetailState extends State<TopicDetail> {
                                         onPressed: () async {
                                           Navigator.of(context).pop();
                                           setState(() {
-                                            widget.topic.listWords.remove(widget.topic.listWords[index]);
+                                            widget.topic.listWords.remove(
+                                                widget.topic.listWords[index]);
                                           });
-                                          await CreateTopicFireBase.updateTopic(widget.topic);
+                                          await CreateTopicFireBase.updateTopic(
+                                              widget.topic);
                                         },
                                         child: const Text("Đồng ý")),
                                   ],
@@ -497,11 +520,15 @@ class _TopicDetailState extends State<TopicDetail> {
                                           onPressed: () async {
                                             await getUser(
                                                 firebaseAuth!.currentUser!.uid);
-                                            bool a = user!.listFavouriteWord.any((element) => element.term == successState.topic.listWords[index].term);
-                                            if(!a){
+                                            bool a = user!.listFavouriteWord
+                                                .any((element) =>
+                                                    element.term ==
+                                                    successState.topic
+                                                        .listWords[index].term);
+                                            if (!a) {
                                               user!.listFavouriteWord.add(
-                                                successState
-                                                    .topic.listWords[index]);
+                                                  successState
+                                                      .topic.listWords[index]);
                                             }
                                             await updateUser(user!);
                                             Fluttertoast.showToast(

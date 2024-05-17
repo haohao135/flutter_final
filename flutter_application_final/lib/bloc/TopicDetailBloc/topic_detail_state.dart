@@ -39,4 +39,9 @@ class TopicDetailDeleteClicklState extends TopicDetailActionState{
   TopicDetailDeleteClicklState({required this.topic});
 }
 
+class TopicDetailResultUserClicklState extends TopicDetailActionState{
+  Topic topic;
+  TopicDetailResultUserClicklState({required this.topic});
+}
+
 class TopicDetailFavoriteClicklState extends TopicDetailState{}

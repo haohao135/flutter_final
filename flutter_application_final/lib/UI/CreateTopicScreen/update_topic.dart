@@ -129,7 +129,7 @@ class _UpdateTopicState extends State<UpdateTopic> {
                               mode: isPrivate,
                               author: FirebaseAuth.instance.currentUser!.email,
                               userId: FirebaseAuth.instance.currentUser!.uid,
-                              listWords: list);
+                              listWords: list, listUserResults: widget.topic.listUserResults);
                           await CreateTopicFireBase.updateTopic(topic);
                           setState(() {
                             isLoading = false;

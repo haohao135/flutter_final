@@ -16,6 +16,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
     on<TopicDetailStarClicklEvent>(_topicDetailStarClicklEvent);
     on<TopicDetailTypingPracticeClicklEvent>(_topicDetailTypingPracticeClicklEvent);
     on<TopicDetailUpdateClicklEvent>(_topicDetailUpdateClicklEvent);
+    on<TopicDetailResultUserClicklEvent>(_topicDetailResultUserClicklEvent);
   }
 
   FutureOr<void> _topicDetailInitialEvent(TopicDetailInitialEvent event, Emitter<TopicDetailState> emit) {
@@ -41,5 +42,9 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
 
   FutureOr<void> _topicDetailUpdateClicklEvent(TopicDetailUpdateClicklEvent event, Emitter<TopicDetailState> emit) {
     emit(TopicDetailUpdateClicklState(topic: event.topic));
+  }
+
+  FutureOr<void> _topicDetailResultUserClicklEvent(TopicDetailResultUserClicklEvent event, Emitter<TopicDetailState> emit) {
+    emit(TopicDetailResultUserClicklState(topic: event.topic));
   }
 }

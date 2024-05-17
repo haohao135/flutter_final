@@ -10,7 +10,7 @@ class Topic{
   List<UserResult> listUserResults = [];
   String? author;
   List<String> listFoldersId = [];
-  Topic({required this.id, required this.name, required this.listWords, required this.mode, required this.author, required this.userId});
+  Topic({required this.id, required this.name, required this.listWords, required this.mode, required this.author, required this.userId, required this.listUserResults});
   Map<String, dynamic> toJson(){
     List<Map<String, dynamic>> wordsJson = listWords.map((word) => word.toJson()).toList();
     List<Map<String, dynamic>> userResultJson = listUserResults.map((userReult) => userReult.toJson()).toList();

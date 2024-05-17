@@ -330,7 +330,7 @@ class _QuizzResultState extends State<QuizzResult> {
                       Container(
                         padding: const EdgeInsets.all(6),
                         margin: const EdgeInsets.only(bottom: 20),
-                        height: 112,
+                        height: 115,
                         width: double.infinity,
                         decoration: const BoxDecoration(
                             color: Color.fromARGB(255, 219, 213, 213)),
@@ -339,14 +339,14 @@ class _QuizzResultState extends State<QuizzResult> {
                           children: [
                             Text(
                               "Đáp án: ${widget.topic.listWords[index].definition}",
-                              style: const TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold,),
                             ),
                             const SizedBox(
                               height: 6,
                             ),
                             Text(
                               "Câu trả lời của bạn: ${widget.answers[index]}",
-                              style: const TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

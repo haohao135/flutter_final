@@ -25,7 +25,6 @@ class _FolderListState extends State<FolderList> {
         .listen((querySnapshot) {
       getData();
     });
-
     super.initState();
   }
 

@@ -70,7 +70,8 @@ class Register {
     List<dynamic> list2 = data["listFavouriteWord"] as List<dynamic>;
     try {
       if (list1.isNotEmpty) {
-        List<Map<String, dynamic>> t1 = list1.map((e) => e as Map<String, dynamic>).toList();
+        List<Map<String, dynamic>> t1 =
+            list1.map((e) => e as Map<String, dynamic>).toList();
         List<Archievement> achieList = t1.map((e) {
           Archievement archievement =
               Archievement(e["id"], e["nameTopic"], e["rank"], id);
@@ -79,19 +80,20 @@ class Register {
         user.listArchievement.addAll(achieList);
       }
       if (list2.isNotEmpty) {
-          List<Map<String, dynamic>> t2 = list2.map((e) => e as Map<String, dynamic>).toList();
-          List<Word> wordList = t2.map((e) {
-            Word word = Word(
-                id: e["id"],
-                term: e["term"],
-                definition: e["definition"],
-                statusE: e["statusE"],
-                isStar: e["isStar"],
-                topicId: e["topicId"]);
-            return word;
-          }).toList();
-          user.listFavouriteWord.addAll(wordList);
-        }
+        List<Map<String, dynamic>> t2 =
+            list2.map((e) => e as Map<String, dynamic>).toList();
+        List<Word> wordList = t2.map((e) {
+          Word word = Word(
+              id: e["id"],
+              term: e["term"],
+              definition: e["definition"],
+              statusE: e["statusE"],
+              isStar: e["isStar"],
+              topicId: e["topicId"]);
+          return word;
+        }).toList();
+        user.listFavouriteWord.addAll(wordList);
+      }
       return user;
     } catch (e) {
       // ignore: avoid_print
@@ -113,6 +115,20 @@ class Register {
       print("khong update dc");
       // ignore: avoid_print
       print(e);
+    }
+  }
+
+  static Future<void> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-email') {
+        // ignore: avoid_print
+        print(e);
+      } else {
+        // ignore: avoid_print
+        print("Khong gui dc");
+      }
     }
   }
 }
