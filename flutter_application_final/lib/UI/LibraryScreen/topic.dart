@@ -50,6 +50,7 @@ class _TopicListState extends State<TopicList> {
                   topic: state.topic,
                 ),
               ));
+
         }
       },
       builder: (context, state) {
