@@ -12,4 +12,6 @@ class Archievement{
       "userId": userId
     };
   }
+
+  static fromJson(Map<String, dynamic> data) {}
 }

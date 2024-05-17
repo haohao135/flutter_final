@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatefulWidget {
   final int maxLines;
-  final String label;
   final String text;
   final ValueChanged<String> onChanged;
   // ignore: prefer_typing_uninitialized_variables
@@ -10,7 +9,6 @@ class TextFieldWidget extends StatefulWidget {
   const TextFieldWidget({
     super.key,
     this.maxLines = 1,
-    required this.label,
     required this.text,
     required this.onChanged,
     required this.control
@@ -42,19 +40,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.label,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          const SizedBox(height: 8),
           TextField(
+            readOnly: true,
             controller: widget.control,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            maxLines: widget.maxLines,
           ),
         ],
       );

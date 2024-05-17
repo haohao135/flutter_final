@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_final/UI/ProfileScreen/constants.dart';
+import 'package:flutter_application_final/UI/ProfileScreen/widget/constants.dart';
 
 class ProfileWidget extends StatelessWidget {
   final IconData icon;
