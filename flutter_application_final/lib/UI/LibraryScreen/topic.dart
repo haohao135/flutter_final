@@ -258,58 +258,58 @@ class _TopicListState extends State<TopicList> {
   //       color: Colors.amber,
   //     ),
   //     title: Text(topic.name),
-  //     // trailing: PopupMenuButton(
-  //     //   onSelected: (value) {
-  //     //     if (value == "Xóa") {
-  //     //       showDialog(
-  //     //         context: context,
-  //     //         builder: (context) => AlertDialog(
-  //     //           shape: RoundedRectangleBorder(
-  //     //               borderRadius: BorderRadius.circular(0)),
-  //     //           content: const Text(
-  //     //             "Xóa chủ đề?",
-  //     //             style: TextStyle(fontSize: 20),
-  //     //           ),
-  //     //           contentPadding: const EdgeInsets.all(30),
-  //     //           actions: [
-  //     //             TextButton(
-  //     //                 onPressed: () {
-  //     //                   Navigator.pop(context);
-  //     //                 },
-  //     //                 child: const Text("Hủy")),
-  //     //             TextButton(
-  //     //                 onPressed: () async {
-  //     //                   Navigator.of(context).pop();
-  //     //                   await CreateTopicFireBase.deleteTopic(topic);
-  //     //                   Fluttertoast.showToast(
-  //     //                       backgroundColor: Colors.teal,
-  //     //                       textColor: Colors.white,
-  //     //                       toastLength: Toast.LENGTH_SHORT,
-  //     //                       gravity: ToastGravity.BOTTOM,
-  //     //                       msg: "Đã xóa chủ đề");
-  //     //                 },
-  //     //                 child: const Text("Đồng ý")),
-  //     //           ],
-  //     //         ),
-  //     //       );
-  //     //     }
-  //     //     if (value == "Thêm vào thư mục") {
-  //     //       showFolderSelectionDialog(context, topic);
-  //     //     }
-  //     //   },
-  //     //   itemBuilder: (context) {
-  //     //     return [
-  //     //       const PopupMenuItem(
-  //     //         value: "Thêm vào thư mục",
-  //     //         child: Text("Thêm vào thư mục"),
-  //     //       ),
-  //     //       const PopupMenuItem(
-  //     //         value: "Xóa",
-  //     //         child: Text("Xóa"),
-  //     //       )
-  //     //     ];
-  //     //   },
-  //     // ),
+  //     trailing: PopupMenuButton(
+  //       onSelected: (value) {
+  //         if (value == "Xóa") {
+  //           showDialog(
+  //             context: context,
+  //             builder: (context) => AlertDialog(
+  //               shape: RoundedRectangleBorder(
+  //                   borderRadius: BorderRadius.circular(0)),
+  //               content: const Text(
+  //                 "Xóa chủ đề?",
+  //                 style: TextStyle(fontSize: 20),
+  //               ),
+  //               contentPadding: const EdgeInsets.all(30),
+  //               actions: [
+  //                 TextButton(
+  //                     onPressed: () {
+  //                       Navigator.pop(context);
+  //                     },
+  //                     child: const Text("Hủy")),
+  //                 TextButton(
+  //                     onPressed: () async {
+  //                       Navigator.of(context).pop();
+  //                       await CreateTopicFireBase.deleteTopic(topic);
+  //                       Fluttertoast.showToast(
+  //                           backgroundColor: Colors.teal,
+  //                           textColor: Colors.white,
+  //                           toastLength: Toast.LENGTH_SHORT,
+  //                           gravity: ToastGravity.BOTTOM,
+  //                           msg: "Đã xóa chủ đề");
+  //                     },
+  //                     child: const Text("Đồng ý")),
+  //               ],
+  //             ),
+  //           );
+  //         }
+  //         if (value == "Thêm vào thư mục") {
+  //           showFolderSelectionDialog(context, topic);
+  //         }
+  //       },
+  //       itemBuilder: (context) {
+  //         return [
+  //           const PopupMenuItem(
+  //             value: "Thêm vào thư mục",
+  //             child: Text("Thêm vào thư mục"),
+  //           ),
+  //           const PopupMenuItem(
+  //             value: "Xóa",
+  //             child: Text("Xóa"),
+  //           )
+  //         ];
+  //       },
+  //     ),
   //   );
   // }
 

@@ -15,6 +15,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../TopicRankingScreen/topic_ranking.dart';
+
 // ignore: must_be_immutable
 class TopicDetail extends StatefulWidget {
   TopicDetail({super.key, required this.topic});
@@ -106,6 +108,14 @@ class _TopicDetailState extends State<TopicDetail> {
                       if (value == "Thêm vào thư mục") {
                         showFolderSelectionDialog(context);
                       }
+                      if (value == "Xem bảng xếp hạng") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TopicRanking(topic: widget.topic),
+                          ),
+                        );
+                      }
                       if (value == "Sửa chủ đề") {
                         topicDetailBloc.add(
                             TopicDetailUpdateClicklEvent(topic: widget.topic));
@@ -196,13 +206,16 @@ class _TopicDetailState extends State<TopicDetail> {
                                                 shape: BoxShape.rectangle,
                                                 color: Colors.white),
                                             child: Center(
-                                                child: Text(
-                                              successState.topic
-                                                  .listWords[index].definition,
-                                              style: const TextStyle(
+                                              child: Text(
+                                                successState.topic.listWords[index].definition,
+                                                style: const TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 25),
-                                            )),
+                                                  fontSize: 25
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              )
+                                            ),
                                           )
                                         : Container(
                                             key: UniqueKey(),
@@ -238,7 +251,10 @@ class _TopicDetailState extends State<TopicDetail> {
                             style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 25,
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.bold
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           IconButton(
                               onPressed: () {},

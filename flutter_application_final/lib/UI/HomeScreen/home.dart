@@ -1,17 +1,13 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_application_final/FireBase/create_folder_firebase.dart';
 import 'package:flutter_application_final/FireBase/create_topic_firebase.dart';
-import 'package:flutter_application_final/FireBase/register_account.dart';
 import 'package:flutter_application_final/UI/LibraryScreen/library.dart';
-import 'package:flutter_application_final/UI/LibraryScreen/topic.dart';
 import 'package:flutter_application_final/bloc/TopicManageBloc/topic_manager_bloc.dart';
 import 'package:flutter_application_final/model/folder.dart';
 import 'package:flutter_application_final/model/topic.dart';
-import 'package:flutter_application_final/model/user.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -28,6 +24,7 @@ class _HomeState extends State<Home> {
   bool isHasTopic = false;
   List<Topic>? topicList;
   List<Folder>? folders = [];
+  int foldersNum=0;
   // String? _email;
   FirebaseAuth? firebaseAuth =FirebaseAuth.instance;
   
@@ -109,9 +106,11 @@ class _HomeState extends State<Home> {
 }
   @override
   Widget build(BuildContext context) {
-    // log("WHY THE HELL WE HAVE "+folders!.length.toString()+" FOLDERS");
-    // log("Current user is "+firebaseAuth!.currentUser!.email.toString());
-    // log("we got "+userFolders().toString());
+    foldersNum= folders!.length;
+    if(folders!.length==0 ){
+      foldersNum = 1;
+      // log("we got "+foldersNum.toString());
+    }   
     return Scaffold(
       appBar: AppBar(       
         elevation: 20.0,
@@ -120,7 +119,7 @@ class _HomeState extends State<Home> {
             bottom: Radius.circular(40),
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 163, 45, 206),       
+        backgroundColor: Color.fromARGB(255, 163, 45, 206),       
         title: const Text(
           "App Name",
           style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 25),
@@ -222,16 +221,23 @@ class _HomeState extends State<Home> {
                       ),
                       foregroundColor: Colors.blue,
                     ),
-                    onPressed: () => navigateToLibary(context),
+                    onPressed: () {
+                      // setState(() {
+                      //   currenScreen = LibraryPage(pos: 0,);
+                      //   currenTab = 2;
+                      // });
+                    },
                     child: const Text(
                       'View all',
                     ),
                   ),
                 ],
               ),
+              
               SizedBox(   
                 height: 180,
-                child: ListView.builder(         
+                child: ListView.builder(   
+                        
                   controller: scrollController,
                   scrollDirection: Axis.horizontal,
                   itemCount: topicList?.length ?? 0,
@@ -357,8 +363,8 @@ class _HomeState extends State<Home> {
                 height: 180,
                 child: ListView.builder(                         
                   controller: scrollController,
-                  scrollDirection: Axis.horizontal,
-                  itemCount:folders!.length,
+                  scrollDirection: Axis.horizontal,                 
+                  itemCount:foldersNum,
                   itemBuilder: (BuildContext context, int index){
                     switch(folders!.length){
                       case 0:
@@ -475,7 +481,7 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.all(12.0),  
           child: Center(
             child: Text(
-              "You haven't got any folder yet",
+              "You haven't got any folders yet",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,
