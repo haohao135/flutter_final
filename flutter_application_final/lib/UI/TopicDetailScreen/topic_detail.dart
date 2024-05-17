@@ -1,10 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_final/FireBase/create_folder_firebase.dart';
+import 'package:flutter_application_final/FireBase/create_topic_firebase.dart';
 import 'package:flutter_application_final/FireBase/register_account.dart';
+import 'package:flutter_application_final/UI/CreateTopicScreen/update_topic.dart';
 import 'package:flutter_application_final/UI/FlashCardScreen/before_flash_card.dart';
 import 'package:flutter_application_final/UI/QuizzScreen/before_quizz.dart';
 import 'package:flutter_application_final/UI/TypingPracticsScreen/before_typing.dart';
 import 'package:flutter_application_final/bloc/TopicDetailBloc/topic_detail_bloc.dart';
+import 'package:flutter_application_final/model/folder.dart';
 import 'package:flutter_application_final/model/topic.dart';
 import 'package:flutter_application_final/model/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +31,8 @@ class _TopicDetailState extends State<TopicDetail> {
   String avatarUrl = "";
   FlutterTts flutterTts = FlutterTts();
   Users? user;
+  List<Folder>? folders = [];
+  List<String> popUpItem = ["Thêm vào thư mục", "Xem bảng xếp hạng"];
   @override
   void initState() {
     topicDetailBloc.add(TopicDetailInitialEvent(topic: widget.topic));
@@ -35,7 +41,11 @@ class _TopicDetailState extends State<TopicDetail> {
         firebaseAuth!.currentUser!.photoURL!.isNotEmpty) {
       avatarUrl = firebaseAuth!.currentUser!.photoURL ?? "";
     }
-    //getUser(firebaseAuth!.currentUser!.uid);
+    if (firebaseAuth!.currentUser!.uid == widget.topic.userId) {
+      popUpItem.add("Sửa chủ đề");
+      popUpItem.add("Xóa chủ đề");
+    }
+    initializeData();
     super.initState();
   }
 
@@ -59,11 +69,14 @@ class _TopicDetailState extends State<TopicDetail> {
               MaterialPageRoute(
                   builder: (context) => BeforeQuizz(topic: state.topic)));
         }
-        if(state is TopicDetailTypingPracticeClicklState){
+        if (state is TopicDetailTypingPracticeClicklState) {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => BeforeTyping(topic: state.topic)));
+        }
+        if (state is TopicDetailUpdateClicklState) {
+          updateTopic(state.topic);
         }
       },
       builder: (context, state) {
@@ -88,12 +101,56 @@ class _TopicDetailState extends State<TopicDetail> {
                         Icons.share,
                         color: Colors.white,
                       )),
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
-                      )),
+                  PopupMenuButton(
+                    onSelected: (value) {
+                      if (value == "Thêm vào thư mục") {
+                        showFolderSelectionDialog(context);
+                      }
+                      if (value == "Sửa chủ đề") {
+                        topicDetailBloc.add(
+                            TopicDetailUpdateClicklEvent(topic: widget.topic));
+                      }
+                      if (value == "Xóa chủ đề") {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0)),
+                            content: const Text(
+                              "Xác nhận xóa chủ đề?",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            contentPadding: const EdgeInsets.all(30),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Hủy")),
+                              TextButton(
+                                  onPressed: () async {
+                                    Navigator.of(context).pop();
+                                    Navigator.pop(context);
+                                    await CreateTopicFireBase.deleteTopic(
+                                        widget.topic);
+                                  },
+                                  child: const Text("Đồng ý")),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.more_vert,
+                      color: Colors.white,
+                    ),
+                    itemBuilder: (context) => popUpItem
+                        .map((e) => PopupMenuItem(
+                              value: e,
+                              child: Text(e),
+                            ))
+                        .toList(),
+                  )
                 ],
               ),
               body: Padding(
@@ -159,13 +216,12 @@ class _TopicDetailState extends State<TopicDetail> {
                                                 color: Colors.white),
                                             child: Center(
                                               child: Text(
-                                                successState.topic.listWords[index].term,
+                                                successState.topic
+                                                    .listWords[index].term,
                                                 style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 25
-                                                ),
+                                                    color: Colors.black,
+                                                    fontSize: 25),
                                               ),
-   
                                             ),
                                           ),
                                   ));
@@ -309,8 +365,9 @@ class _TopicDetailState extends State<TopicDetail> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          topicDetailBloc.add(TopicDetailTypingPracticeClicklEvent(
-                              topic: successState.topic));
+                          topicDetailBloc.add(
+                              TopicDetailTypingPracticeClicklEvent(
+                                  topic: successState.topic));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(4),
@@ -361,69 +418,108 @@ class _TopicDetailState extends State<TopicDetail> {
                         shrinkWrap: true,
                         itemCount: successState.topic.listWords.length,
                         itemBuilder: (context, index) {
-                          return Container(
-                            padding: const EdgeInsets.all(8),
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8))),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  successState.topic.listWords[index].term,
-                                  style: const TextStyle(
-                                      color: Color.fromARGB(255, 163, 45, 206),
-                                      fontSize: 20),
-                                ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
+                          return GestureDetector(
+                            onLongPress: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(0)),
+                                  content: const Text(
+                                    "Xác nhận xóa từ vựng?",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  contentPadding: const EdgeInsets.all(30),
+                                  actions: [
+                                    TextButton(
                                         onPressed: () {
-                                          speak(successState
-                                              .topic.listWords[index].term);
+                                          Navigator.pop(context);
                                         },
-                                        icon: const Icon(Icons.volume_up)),
-                                    IconButton(
-                                        onPressed: () {
-                                          topicDetailBloc.add(TopicDetailStarClicklEvent(topic: successState
-                                                .topic, index: index));
-                                        },
-                                        icon: successState
-                                                .topic.listWords[index].isStar
-                                            ? const Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                              )
-                                            : const Icon(
-                                                Icons.star_border_outlined,
-                                                color: Colors.amber,
-                                              )),
-                                    IconButton(
+                                        child: const Text("Hủy")),
+                                    TextButton(
                                         onPressed: () async {
-                                          await getUser(
-                                              firebaseAuth!.currentUser!.uid);
-                                          user!.listFavouriteWord.add(
-                                              successState
-                                                  .topic.listWords[index]);
-                                          await updateUser(user!);
-                                          Fluttertoast.showToast(
-                                              backgroundColor: Colors.teal,
-                                              textColor: Colors.white,
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              msg:
-                                                  "Đã thêm vào danh sách yêu thích");
+                                          Navigator.of(context).pop();
+                                          setState(() {
+                                            widget.topic.listWords.remove(widget.topic.listWords[index]);
+                                          });
+                                          await CreateTopicFireBase.updateTopic(widget.topic);
                                         },
-                                        icon: const Icon(
-                                          Icons.favorite_border_rounded,
-                                          color: Colors.red,
-                                        ))
+                                        child: const Text("Đồng ý")),
                                   ],
-                                )
-                              ],
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              margin: const EdgeInsets.only(bottom: 10),
+                              decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8))),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    successState.topic.listWords[index].term,
+                                    style: const TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 163, 45, 206),
+                                        fontSize: 20),
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            speak(successState
+                                                .topic.listWords[index].term);
+                                          },
+                                          icon: const Icon(Icons.volume_up)),
+                                      IconButton(
+                                          onPressed: () {
+                                            topicDetailBloc.add(
+                                                TopicDetailStarClicklEvent(
+                                                    topic: successState.topic,
+                                                    index: index));
+                                          },
+                                          icon: successState
+                                                  .topic.listWords[index].isStar
+                                              ? const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                )
+                                              : const Icon(
+                                                  Icons.star_border_outlined,
+                                                  color: Colors.amber,
+                                                )),
+                                      IconButton(
+                                          onPressed: () async {
+                                            await getUser(
+                                                firebaseAuth!.currentUser!.uid);
+                                            bool a = user!.listFavouriteWord.any((element) => element.term == successState.topic.listWords[index].term);
+                                            if(!a){
+                                              user!.listFavouriteWord.add(
+                                                successState
+                                                    .topic.listWords[index]);
+                                            }
+                                            await updateUser(user!);
+                                            Fluttertoast.showToast(
+                                                backgroundColor: Colors.teal,
+                                                textColor: Colors.white,
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                msg:
+                                                    "Đã thêm vào danh sách yêu thích");
+                                          },
+                                          icon: const Icon(
+                                            Icons.favorite_border_rounded,
+                                            color: Colors.red,
+                                          ))
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -454,7 +550,74 @@ class _TopicDetailState extends State<TopicDetail> {
     user = await Register.getUserById(id);
   }
 
+  Future<void> initializeData() async {
+    await getFolders();
+  }
+
+  Future<void> getFolders() async {
+    List<Folder> foldersss = await CreateFolderFireBase.getFolderData();
+    setState(() {
+      folders!.addAll(foldersss);
+    });
+  }
+
   Future<void> updateUser(Users user) async {
     await Register.updateUser(user);
+  }
+
+  void showFolderSelectionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+          title: const Text('Chọn thư mục'),
+          content: SizedBox(
+            height: 150,
+            width: double.maxFinite,
+            child: folders!.isNotEmpty && folders != null
+                ? ListView.builder(
+                    itemCount: folders!.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        onTap: () {
+                          if (!folders![index]
+                              .listTopicId
+                              .contains(widget.topic.id)) {
+                            folders![index].listTopicId.add(widget.topic.id);
+                            CreateFolderFireBase.updateFolder(folders![index]);
+                          }
+                          Fluttertoast.showToast(
+                              backgroundColor: Colors.teal,
+                              textColor: Colors.white,
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              msg:
+                                  "Đã thêm vào folder ${folders![index].name}");
+                          Navigator.of(context).pop();
+                        },
+                        title: Text(folders![index].name),
+                        leading: Image.asset("assets/images/folder.png"),
+                      );
+                    },
+                  )
+                : const Center(child: Text("Hiện tại chưa có thư mục nào")),
+          ),
+        );
+      },
+    );
+  }
+
+  void updateTopic(Topic thisTopic) async {
+    var rs = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => UpdateTopic(topic: thisTopic)));
+    if (rs != null) {
+      Fluttertoast.showToast(
+          backgroundColor: Colors.teal,
+          textColor: Colors.white,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          msg: "Cập nhật thành công");
+    }
   }
 }

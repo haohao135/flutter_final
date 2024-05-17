@@ -42,4 +42,14 @@ class TopicDetailStarClicklEvent extends TopicDetailEvent {
   TopicDetailStarClicklEvent({required this.topic, required this.index});
 }
 
+class TopicDetailUpdateClicklEvent extends TopicDetailEvent {
+  Topic topic;
+  TopicDetailUpdateClicklEvent({required this.topic});
+}
+
+class TopicDetailDeleteClicklEvent extends TopicDetailEvent {
+  Topic topic;
+  TopicDetailDeleteClicklEvent({required this.topic});
+}
+
 class TopicDetailErrorlEvent extends TopicDetailEvent {}

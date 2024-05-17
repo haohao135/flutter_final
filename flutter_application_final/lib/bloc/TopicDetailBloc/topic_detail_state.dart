@@ -29,4 +29,14 @@ class TopicDetailTypingPracticeClicklState extends TopicDetailActionState{
   TopicDetailTypingPracticeClicklState({required this.topic});
 }
 
+class TopicDetailUpdateClicklState extends TopicDetailActionState{
+  Topic topic;
+  TopicDetailUpdateClicklState({required this.topic});
+}
+
+class TopicDetailDeleteClicklState extends TopicDetailActionState{
+  Topic topic;
+  TopicDetailDeleteClicklState({required this.topic});
+}
+
 class TopicDetailFavoriteClicklState extends TopicDetailState{}

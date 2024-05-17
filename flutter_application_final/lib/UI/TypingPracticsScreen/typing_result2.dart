@@ -4,26 +4,20 @@ import 'package:flutter_application_final/FireBase/create_topic_firebase.dart';
 import 'package:flutter_application_final/model/topic.dart';
 import 'package:flutter_application_final/model/user_result.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-// import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 // ignore: must_be_immutable
-class QuizzResult extends StatefulWidget {
-  QuizzResult(
-      {super.key,
-      required this.topic,
-      required this.correctAnswer,
-      required this.second,
-      required this.answers});
-  Topic topic;
-  int correctAnswer;
+class TypingResult2 extends StatefulWidget {
+  TypingResult2({super.key, required this.topic, required this.correctAnswer, required this.results, required this.second});
+    Topic topic;
   int second;
-  List<String> answers;
+  int correctAnswer;
+  List<String> results;
   @override
-  State<QuizzResult> createState() => _QuizzResultState();
+  State<TypingResult2> createState() => _TypingResultState();
 }
 
-class _QuizzResultState extends State<QuizzResult> {
+class _TypingResultState extends State<TypingResult2> {
   int? phantram;
   FlutterTts flutterTts = FlutterTts();
   @override
@@ -38,9 +32,9 @@ class _QuizzResultState extends State<QuizzResult> {
         correctAnswers: widget.correctAnswer,
         date: now,
         duration: widget.second,
-        attempt: 1, mode: false);
+        attempt: 1, mode: true);
     for (var i in widget.topic.listUserResults) {
-      if (i.userId == FirebaseAuth.instance.currentUser!.uid && i.mode == false) {
+      if (i.userId == FirebaseAuth.instance.currentUser!.uid && i.mode == true) {
         userResult.attempt = i.attempt + 1;
         widget.topic.listUserResults.remove(i);
         break;
@@ -49,7 +43,6 @@ class _QuizzResultState extends State<QuizzResult> {
     updateTopic(widget.topic, userResult);
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -303,8 +296,8 @@ class _QuizzResultState extends State<QuizzResult> {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      widget.answers[index] ==
-                              widget.topic.listWords[index].definition
+                      widget.results[index].toLowerCase() ==
+                              widget.topic.listWords[index].term.toLowerCase()
                           ? Container(
                               padding: const EdgeInsets.all(4),
                               height: 30,
@@ -338,14 +331,14 @@ class _QuizzResultState extends State<QuizzResult> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Đáp án: ${widget.topic.listWords[index].definition}",
+                              "Đáp án: ${widget.topic.listWords[index].term}",
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(
                               height: 6,
                             ),
                             Text(
-                              "Câu trả lời của bạn: ${widget.answers[index]}",
+                              "Câu trả lời của bạn: ${widget.results[index]}",
                               style: const TextStyle(fontSize: 16),
                             ),
                             Row(
@@ -377,7 +370,19 @@ class _QuizzResultState extends State<QuizzResult> {
       ),
     );
   }
+  Future<void> updateTopic(Topic topic, UserResult userResult) async {
+    await addResult(userResult);
+    await CreateTopicFireBase.updateTopic(topic);
+  }
 
+  Future<void> addResult(UserResult userResult) async {
+    widget.topic.listUserResults.add(userResult);
+  }
+  Future<void> speak(String text) async {
+    await flutterTts.setLanguage('en-US');
+    await flutterTts.setPitch(1);
+    await flutterTts.speak(text);
+  }
   String formatTime(int seconds) {
     int minutes = (seconds / 60).floor();
     int remainingSeconds = seconds % 60;
@@ -386,20 +391,5 @@ class _QuizzResultState extends State<QuizzResult> {
     String secondsStr = remainingSeconds.toString().padLeft(2, '0');
 
     return '$minutesStr:$secondsStr';
-  }
-
-  Future<void> speak(String text) async {
-    await flutterTts.setLanguage('en-US');
-    await flutterTts.setPitch(1);
-    await flutterTts.speak(text);
-  }
-
-  Future<void> updateTopic(Topic topic, UserResult userResult) async {
-    await addResult(userResult);
-    await CreateTopicFireBase.updateTopic(topic);
-  }
-
-  Future<void> addResult(UserResult userResult) async {
-    widget.topic.listUserResults.add(userResult);
   }
 }

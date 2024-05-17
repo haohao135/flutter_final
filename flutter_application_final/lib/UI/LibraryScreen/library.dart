@@ -51,7 +51,7 @@ class _LibraryPageState extends State<LibraryPage>
                   var rs = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CreateFolder()));
+                          builder: (context) => CreateFolder(name: null, des: null,)));
                   if (rs != null) {
                     Fluttertoast.showToast(
                         backgroundColor: Colors.teal,
