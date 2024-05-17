@@ -9,32 +9,12 @@ class AchievementPage extends StatefulWidget {
 }
 
 class _AchievementPageState extends State<AchievementPage> {
-  List<Archievement> _achievements = [];
+  List<Archievement> _achievements = [
+    Archievement('1', 'Flutter Mastery', 1, 'user1'),
+    Archievement('2', 'Dart Expert', 2, 'user2'),
+    Archievement('3', 'UI/UX Design', 3, 'user3'),
+  ];
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchAchievements();
-  }
-
-  void _fetchAchievements() async {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
-    final achievementsSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .collection('achievements')
-        .get();
-
-    final List<Archievement> achievements = [];
-    achievementsSnapshot.docs.forEach((doc) {
-      final achievement = Archievement.fromJson(doc.data());
-      achievements.add(achievement);
-    });
-
-    setState(() {
-      _achievements = achievements;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

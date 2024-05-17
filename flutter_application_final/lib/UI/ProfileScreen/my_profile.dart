@@ -71,7 +71,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 ),
                 TextFieldWidget(
                   control: cl1,
-                  text: 'hêlllo',
+                  text: '',
                   onChanged: (email) {},
                 ),
               ],
