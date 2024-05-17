@@ -52,4 +52,9 @@ class TopicDetailDeleteClicklEvent extends TopicDetailEvent {
   TopicDetailDeleteClicklEvent({required this.topic});
 }
 
+class TopicDetailResultUserClicklEvent extends TopicDetailEvent {
+  Topic topic;
+  TopicDetailResultUserClicklEvent({required this.topic});
+}
+
 class TopicDetailErrorlEvent extends TopicDetailEvent {}

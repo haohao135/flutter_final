@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/FireBase/register_account.dart';
+import 'package:flutter_application_final/UI/ForgotPasswordScreen/forgotpassword.dart';
 import 'package:flutter_application_final/UI/RegisterScreen/register.dart';
 import 'package:flutter_application_final/validation/validation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,12 +13,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool hidePassword = true, remember = false, er1 = false, er2 = false, isLoading = false;
+  bool hidePassword = true,
+      remember = false,
+      er1 = false,
+      er2 = false,
+      isLoading = false;
   final _userNameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void sigIn() async{
-     if(Validation.isValidEmail(_userNameController.text) && Validation.isValidPassword(_passwordController.text)){
+  void sigIn() async {
+    if (Validation.isValidEmail(_userNameController.text) &&
+        Validation.isValidPassword(_passwordController.text)) {
       setState(() {
         isLoading = true;
       });
@@ -30,29 +35,30 @@ class _LoginPageState extends State<LoginPage> {
                     child: CircularProgressIndicator(),
                   ))
           : null;
-      await Register.loginAccount(_userNameController.text, _passwordController.text, context);
+      await Register.loginAccount(
+          _userNameController.text, _passwordController.text, context);
       setState(() {
         isLoading = false;
       });
-     }
-     if(!Validation.isValidEmail(_userNameController.text)){
+    }
+    if (!Validation.isValidEmail(_userNameController.text)) {
       setState(() {
         er1 = true;
       });
-     } else{
+    } else {
       setState(() {
         er1 = false;
       });
-     }
-     if(!Validation.isValidPassword(_passwordController.text)){
+    }
+    if (!Validation.isValidPassword(_passwordController.text)) {
       setState(() {
         er2 = true;
       });
-     } else{
+    } else {
       setState(() {
         er2 = false;
       });
-     }
+    }
   }
 
   @override
@@ -98,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
             decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: "Mật khẩu",
-                errorText: er2 ? "Mật khẩu phải trên 6 kí tự" : null,                   
+                errorText: er2 ? "Mật khẩu phải trên 6 kí tự" : null,
                 suffixIcon: IconButton(
                     onPressed: () {
                       setState(() {
@@ -106,8 +112,8 @@ class _LoginPageState extends State<LoginPage> {
                       });
                     },
                     icon: hidePassword
-                      ? const Icon(Icons.visibility)
-                      : const Icon(Icons.visibility_off))),
+                        ? const Icon(Icons.visibility)
+                        : const Icon(Icons.visibility_off))),
           ),
           const SizedBox(
             height: 10,
@@ -130,10 +136,27 @@ class _LoginPageState extends State<LoginPage> {
                   )
                 ],
               ),
-              const Text(
-                "Quên mật khẩu?",
-                style:
-                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+              GestureDetector(
+                onTap: () async {
+                  var rs = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ForgotPasswordPage(),
+                      ));
+                  if (rs != null) {
+                    Fluttertoast.showToast(
+                        backgroundColor: Colors.teal,
+                        textColor: Colors.white,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        msg: "Vui lòng kiểm tra email của bạn");
+                  }
+                },
+                child: const Text(
+                  "Quên mật khẩu?",
+                  style: TextStyle(
+                      color: Colors.blue, fontWeight: FontWeight.bold),
+                ),
               )
             ],
           ),
@@ -187,23 +210,19 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                   width: 70,
                   height: 70,
-                  child: Image.asset(
-                      "assets/images/Facebook-Logo.png")),
+                  child: Image.asset("assets/images/Facebook-Logo.png")),
               SizedBox(
                   width: 40,
                   height: 40,
-                  child: Image.asset(
-                      "assets/images/Twitter-Logo.png")),
+                  child: Image.asset("assets/images/Twitter-Logo.png")),
               SizedBox(
                   width: 40,
                   height: 40,
-                  child: Image.asset(
-                      "assets/images/Google-Logo.png")),
+                  child: Image.asset("assets/images/Google-Logo.png")),
               SizedBox(
                   width: 40,
                   height: 40,
-                  child: Image.asset(
-                      "assets/images/Apple-logo.png")),
+                  child: Image.asset("assets/images/Apple-logo.png")),
             ],
           ),
           Row(
@@ -211,16 +230,19 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const Text("Chưa có tài khoản?"),
               GestureDetector(
-                onTap: () async{
-                  var rs = await Navigator.push(context, MaterialPageRoute(builder: (context)=> const Register1()));
-                  if(rs!=null){
-                Fluttertoast.showToast(
-                  backgroundColor: Colors.teal,
-                  textColor: Colors.white,
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  msg: "Đăng ký tài khoản thành công");
-              }
+                onTap: () async {
+                  var rs = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Register1()));
+                  if (rs != null) {
+                    Fluttertoast.showToast(
+                        backgroundColor: Colors.teal,
+                        textColor: Colors.white,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        msg: "Đăng ký tài khoản thành công");
+                  }
                 },
                 child: const Text(
                   " Đăng ký ",

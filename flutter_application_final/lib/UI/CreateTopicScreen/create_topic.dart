@@ -112,7 +112,7 @@ class _CreateTopicState extends State<CreateTopic> {
                               mode: isPrivate,
                               author: FirebaseAuth.instance.currentUser!.email,
                               userId: FirebaseAuth.instance.currentUser!.uid,
-                              listWords: list);
+                              listWords: list, listUserResults: []);
                           await CreateTopicFireBase.createTopic(topic);
                           setState(() {
                             isLoading = false;

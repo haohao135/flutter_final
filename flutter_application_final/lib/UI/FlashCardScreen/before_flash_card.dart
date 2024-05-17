@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/UI/FlashCardScreen/flash_card.dart';
 import 'package:flutter_application_final/model/topic.dart';
+import 'package:flutter_application_final/model/user_result.dart';
 import 'package:flutter_application_final/model/word.dart';
 
 // ignore: must_be_immutable
@@ -59,7 +60,7 @@ class BeforeFlashCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8))),
               onPressed: () {
                 Topic topic2 = newTopic(topic.id, topic.name, topic.listWords,
-                    topic.mode, topic.author, topic.userId);
+                    topic.mode, topic.author, topic.userId, topic.listUserResults);
                 if (topic2.listWords.isEmpty) {
                   showDialog(
                     context: context,
@@ -101,7 +102,7 @@ class BeforeFlashCard extends StatelessWidget {
   }
 
   Topic newTopic(String id, String name, List<Word> listWords, bool mode,
-      String? author, String userId) {
+      String? author, String userId, List<UserResult> list) {
     
     List<Word> newListWord = [];
     for (var i in topic.listWords) {
@@ -115,7 +116,7 @@ class BeforeFlashCard extends StatelessWidget {
         listWords: newListWord,
         mode: mode,
         author: author,
-        userId: userId);
+        userId: userId, listUserResults: list);
     return topic1;
   }
 }

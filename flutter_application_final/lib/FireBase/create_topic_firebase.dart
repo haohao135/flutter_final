@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_final/FireBase/create_word_firebase.dart';
 import 'package:flutter_application_final/model/topic.dart';
+import 'package:flutter_application_final/model/user_result.dart';
 import 'package:flutter_application_final/model/word.dart';
 
 class CreateTopicFireBase {
@@ -35,13 +36,32 @@ class CreateTopicFireBase {
                   topicId: e["topicId"]);
               return word;
             }).toList();
+
+            List<dynamic> listResult1 =
+                data["listUserResults"] as List<dynamic>;
+            List<Map<String, dynamic>> convertedlistResul =
+                listResult1.map((e) => e as Map<String, dynamic>).toList();
+            List<UserResult> userResultList = convertedlistResul.map((e) {
+              final Timestamp timestampValue = e["date"];
+              final DateTime dateTimeValue = timestampValue.toDate();
+              UserResult u = UserResult(
+                  id: e["id"],
+                  userId: e["userId"],
+                  correctAnswers: e["correctAnswers"],
+                  date: dateTimeValue,
+                  duration: e["duration"],
+                  attempt: e["attempt"],
+                  mode: e["mode"]);
+              return u;
+            }).toList();
             Topic topic = Topic(
                 id: i.id,
                 name: data["name"],
                 listWords: wordList,
                 mode: i["mode"],
                 author: i["author"],
-                userId: i["userId"]);
+                userId: i["userId"],
+                listUserResults: userResultList);
             topicList.add(topic);
           }
         }
@@ -92,13 +112,31 @@ class CreateTopicFireBase {
                   topicId: e["topicId"]);
               return word;
             }).toList();
+            List<dynamic> listResult1 =
+                data["listUserResults"] as List<dynamic>;
+            List<Map<String, dynamic>> convertedlistResul =
+                listResult1.map((e) => e as Map<String, dynamic>).toList();
+            List<UserResult> userResultList = convertedlistResul.map((e) {
+              final Timestamp timestampValue = e["date"];
+              final DateTime dateTimeValue = timestampValue.toDate();
+              UserResult u = UserResult(
+                  id: e["id"],
+                  userId: e["userId"],
+                  correctAnswers: e["correctAnswers"],
+                  date: dateTimeValue,
+                  duration: e["duration"],
+                  attempt: e["attempt"],
+                  mode: e["mode"]);
+              return u;
+            }).toList();
             Topic topic = Topic(
                 id: i.id,
                 name: data["name"],
                 listWords: wordList,
                 mode: i["mode"],
                 author: i["author"],
-                userId: i["userId"]);
+                userId: i["userId"],
+                listUserResults: userResultList);
             topicList.add(topic);
           }
         }
@@ -150,13 +188,30 @@ class CreateTopicFireBase {
               topicId: e["topicId"]);
           return word;
         }).toList();
+        List<dynamic> listResult1 = data["listUserResults"] as List<dynamic>;
+        List<Map<String, dynamic>> convertedlistResul =
+            listResult1.map((e) => e as Map<String, dynamic>).toList();
+        List<UserResult> userResultList = convertedlistResul.map((e) {
+              final Timestamp timestampValue = e["date"];
+              final DateTime dateTimeValue = timestampValue.toDate();
+              UserResult u = UserResult(
+                  id: e["id"],
+                  userId: e["userId"],
+                  correctAnswers: e["correctAnswers"],
+                  date: dateTimeValue,
+                  duration: e["duration"],
+                  attempt: e["attempt"],
+                  mode: e["mode"]);
+              return u;
+            }).toList();
         topic = Topic(
             id: data["id"],
             name: data["name"],
             listWords: wordList,
             mode: data["mode"],
             author: data["author"],
-            userId: data["userId"]);
+            userId: data["userId"],
+            listUserResults: userResultList);
         return topic;
       }
       throw Exception("Không tìm thấy dữ liệu");

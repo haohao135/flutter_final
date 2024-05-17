@@ -20,7 +20,6 @@ class TopicList extends StatefulWidget {
 }
 
 class _TopicListState extends State<TopicList> {
-  
   bool isHasTopic = false;
   List<Topic>? topicList;
   final TopicManagerBloc topicManagerBloc = TopicManagerBloc();
@@ -45,12 +44,12 @@ class _TopicListState extends State<TopicList> {
       listener: (context, state) {
         if (state is DetailTopicManagerEventClickState) {
           Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TopicDetail(
-                topic: state.topic,
-              ),
-            ));
+              context,
+              MaterialPageRoute(
+                builder: (context) => TopicDetail(
+                  topic: state.topic,
+                ),
+              ));
         }
       },
       builder: (context, state) {
@@ -153,7 +152,10 @@ class _TopicListState extends State<TopicList> {
     );
   }
 
-  Future<Widget> topicItem({Function()? onTap,required Topic topic,required TopicManagerBloc topicManagerBloc}) async {
+  Future<Widget> topicItem(
+      {Function()? onTap,
+      required Topic topic,
+      required TopicManagerBloc topicManagerBloc}) async {
     Users users = await Register.getUserById(topic.userId);
     return GestureDetector(
       onTap: onTap,
@@ -184,41 +186,93 @@ class _TopicListState extends State<TopicList> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              topic.name,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                  child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            topic.name,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ],
-                      ),
-                      Text(
-                        "${topic.listWords.length} từ vựng",
-                        style: const TextStyle(
-                          color: Color.fromARGB(255, 112, 112, 112),
-                          fontSize: 18,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        PopupMenuButton(
+                          onSelected: (value) {
+                            if (value == "Xóa") {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(0)),
+                                  content: const Text(
+                                    "Xóa chủ đề?",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  contentPadding: const EdgeInsets.all(30),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Hủy")),
+                                    TextButton(
+                                        onPressed: () async {
+                                          Navigator.of(context).pop();
+                                          await CreateTopicFireBase.deleteTopic(
+                                              topic);
+                                          Fluttertoast.showToast(
+                                              backgroundColor: Colors.teal,
+                                              textColor: Colors.white,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              msg: "Đã xóa chủ đề");
+                                        },
+                                        child: const Text("Đồng ý")),
+                                  ],
+                                ),
+                              );
+                            }
+                            if (value == "Thêm vào thư mục") {
+                              showFolderSelectionDialog(context, topic);
+                            }
+                          },
+                          itemBuilder: (context) {
+                            return [
+                              const PopupMenuItem(
+                                value: "Thêm vào thư mục",
+                                child: Text("Thêm vào thư mục"),
+                              ),
+                              const PopupMenuItem(
+                                value: "Xóa",
+                                child: Text("Xóa"),
+                              )
+                            ];
+                          },
+                        ),
+                      ],
+                    ),
+                    Text(
+                      "${topic.listWords.length} từ vựng",
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 112, 112, 112),
+                        fontSize: 18,
                       ),
-                    ],
-                  ),
-                )
-              ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              )),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 child: Row(

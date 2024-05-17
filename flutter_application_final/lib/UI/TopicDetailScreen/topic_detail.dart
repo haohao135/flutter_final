@@ -80,6 +80,15 @@ class _TopicDetailState extends State<TopicDetail> {
         if (state is TopicDetailUpdateClicklState) {
           updateTopic(state.topic);
         }
+
+        if (state is TopicDetailResultUserClicklState) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TopicRanking(topic: state.topic),
+            ),
+          );
+        }
       },
       builder: (context, state) {
         switch (state.runtimeType) {
@@ -109,12 +118,7 @@ class _TopicDetailState extends State<TopicDetail> {
                         showFolderSelectionDialog(context);
                       }
                       if (value == "Xem bảng xếp hạng") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TopicRanking(topic: widget.topic),
-                          ),
-                        );
+                        topicDetailBloc.add(TopicDetailResultUserClicklEvent(topic: widget.topic));
                       }
                       if (value == "Sửa chủ đề") {
                         topicDetailBloc.add(
@@ -206,16 +210,15 @@ class _TopicDetailState extends State<TopicDetail> {
                                                 shape: BoxShape.rectangle,
                                                 color: Colors.white),
                                             child: Center(
-                                              child: Text(
-                                                successState.topic.listWords[index].definition,
-                                                style: const TextStyle(
+                                                child: Text(
+                                              successState.topic
+                                                  .listWords[index].definition,
+                                              style: const TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 25
-                                                ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              )
-                                            ),
+                                                  fontSize: 25),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            )),
                                           )
                                         : Container(
                                             key: UniqueKey(),
@@ -251,8 +254,7 @@ class _TopicDetailState extends State<TopicDetail> {
                             style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 25,
-                                fontWeight: FontWeight.bold
-                            ),
+                                fontWeight: FontWeight.bold),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -456,9 +458,11 @@ class _TopicDetailState extends State<TopicDetail> {
                                         onPressed: () async {
                                           Navigator.of(context).pop();
                                           setState(() {
-                                            widget.topic.listWords.remove(widget.topic.listWords[index]);
+                                            widget.topic.listWords.remove(
+                                                widget.topic.listWords[index]);
                                           });
-                                          await CreateTopicFireBase.updateTopic(widget.topic);
+                                          await CreateTopicFireBase.updateTopic(
+                                              widget.topic);
                                         },
                                         child: const Text("Đồng ý")),
                                   ],
@@ -513,11 +517,15 @@ class _TopicDetailState extends State<TopicDetail> {
                                           onPressed: () async {
                                             await getUser(
                                                 firebaseAuth!.currentUser!.uid);
-                                            bool a = user!.listFavouriteWord.any((element) => element.term == successState.topic.listWords[index].term);
-                                            if(!a){
+                                            bool a = user!.listFavouriteWord
+                                                .any((element) =>
+                                                    element.term ==
+                                                    successState.topic
+                                                        .listWords[index].term);
+                                            if (!a) {
                                               user!.listFavouriteWord.add(
-                                                successState
-                                                    .topic.listWords[index]);
+                                                  successState
+                                                      .topic.listWords[index]);
                                             }
                                             await updateUser(user!);
                                             Fluttertoast.showToast(
