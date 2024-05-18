@@ -65,8 +65,13 @@ class _TopicRankingState extends State<TopicRanking> {
   List<String> listUserName = [];
   @override
   void initState() {
+    widget.topic.listUserResults.sort((a, b) => b.correctAnswers.compareTo(a.correctAnswers),);
     getUser();
     super.initState();
+  }
+
+  void sort(){
+
   }
 
   void getUser() async {

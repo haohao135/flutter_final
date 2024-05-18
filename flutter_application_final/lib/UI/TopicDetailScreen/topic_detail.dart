@@ -37,8 +37,9 @@ class _TopicDetailState extends State<TopicDetail> {
   List<String> popUpItem = ["Thêm vào thư mục", "Xem bảng xếp hạng"];
   @override
   void initState() {
-    topicDetailBloc.add(TopicDetailInitialEvent(topic: widget.topic));
     firebaseAuth = FirebaseAuth.instance;
+    getUser(firebaseAuth!.currentUser!.uid);
+    topicDetailBloc.add(TopicDetailInitialEvent(topic: widget.topic));
     if (firebaseAuth!.currentUser!.photoURL != null &&
         firebaseAuth!.currentUser!.photoURL!.isNotEmpty) {
       avatarUrl = firebaseAuth!.currentUser!.photoURL ?? "";
@@ -47,7 +48,7 @@ class _TopicDetailState extends State<TopicDetail> {
       popUpItem.add("Sửa chủ đề");
       popUpItem.add("Xóa chủ đề");
     }
-    initializeData();
+    initializeData(firebaseAuth!.currentUser!.uid);
     super.initState();
   }
 
@@ -118,7 +119,8 @@ class _TopicDetailState extends State<TopicDetail> {
                         showFolderSelectionDialog(context);
                       }
                       if (value == "Xem bảng xếp hạng") {
-                        topicDetailBloc.add(TopicDetailResultUserClicklEvent(topic: widget.topic));
+                        topicDetailBloc.add(TopicDetailResultUserClicklEvent(
+                            topic: widget.topic));
                       }
                       if (value == "Sửa chủ đề") {
                         topicDetailBloc.add(
@@ -255,8 +257,7 @@ class _TopicDetailState extends State<TopicDetail> {
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 25,
-                                  fontWeight: FontWeight.bold
-                              ),
+                                  fontWeight: FontWeight.bold),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -577,8 +578,9 @@ class _TopicDetailState extends State<TopicDetail> {
     user = await Register.getUserById(id);
   }
 
-  Future<void> initializeData() async {
+  Future<void> initializeData(String id) async {
     await getFolders();
+    await getUser(id);
   }
 
   Future<void> getFolders() async {
