@@ -121,6 +121,7 @@ class Register {
   static Future<void> resetPassword(String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email') {
         // ignore: avoid_print

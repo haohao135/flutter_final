@@ -88,7 +88,7 @@ class _CreateFolderState extends State<CreateFolder> {
           userId, folderNameController.text, folderDescriptionController.text);
       }
       if(widget.name != null){
-        Folder folder = Folder(id: widget.folder!.id, name: widget.folder!.name, userId: widget.folder!.userId, description: widget.folder!.description);
+        Folder folder = Folder(id: widget.folder!.id, name: folderNameController.text, userId: widget.folder!.userId, description: folderDescriptionController.text);
         folder.listTopicId.addAll(widget.folder!.listTopicId);
         updateFolder(folder);
       }
