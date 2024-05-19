@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/FireBase/register_account.dart';
 import 'package:flutter_application_final/UI/ProfileScreen/ChangeName.dart';
-import 'package:flutter_application_final/UI/ProfileScreen/widget/myprofile_widget.dart';
+import 'package:flutter_application_final/UI/ProfileScreen/ChangePass.dart';
+import 'package:flutter_application_final/UI/ProfileScreen/widget/constants.dart';
 import 'package:flutter_application_final/UI/ProfileScreen/widget/profile_widget.dart';
 import 'package:flutter_application_final/UI/ProfileScreen/widget/textfield_widget.dart';
 import 'package:flutter_application_final/model/user.dart';
@@ -14,13 +15,6 @@ class MyProfilePage extends StatefulWidget {
   _MyProfilePageState createState() => _MyProfilePageState();
 }
 
-void navigateToChangePass(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => const MyProfilePage()),
-  );
-}
-
 void navigateToChangeName(BuildContext context) {
   Navigator.push(
     context,
@@ -28,8 +22,14 @@ void navigateToChangeName(BuildContext context) {
   );
 }
 
+void navigateToChangePass(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+  );
+}
+
 class _MyProfilePageState extends State<MyProfilePage> {
-  String? _imagePath;
   Users? users;
   var cl1 = TextEditingController();
   var cl2 = TextEditingController();
@@ -52,13 +52,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
           leading: const BackButton(color: Colors.white),
         ),
         body: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: const EdgeInsets.all(16),
           physics: const BouncingScrollPhysics(),
           children: [
-            MyProfileWidget(
-              imagePath: '$_imagePath',
-              isEdit: true,
-              onClicked: () async {},
+            Container(
+              width: 150,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Constants.primaryColor.withOpacity(.5),
+                  width: 5.0,
+                ),
+              ),
+              child: const CircleAvatar(
+                radius: 60,
+                backgroundImage: ExactAssetImage('assets/images/typing.png'),
+              ),
             ),
             const SizedBox(height: 16),
             Column(
