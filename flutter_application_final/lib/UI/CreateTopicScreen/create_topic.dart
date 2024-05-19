@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_final/FireBase/create_topic_firebase.dart';
@@ -44,6 +47,7 @@ class _CreateTopicState extends State<CreateTopic> {
       listener: (context, state) {
         if (state is CreateTopicScanDocumentClick) {
           importVocabFromCSV();
+          print("hi");
         }
       },
       builder: (context, state) {
@@ -111,7 +115,8 @@ class _CreateTopicState extends State<CreateTopic> {
                               mode: isPrivate,
                               author: FirebaseAuth.instance.currentUser!.email,
                               userId: FirebaseAuth.instance.currentUser!.uid,
-                              listWords: list, listUserResults: []);
+                              listWords: list,
+                              listUserResults: []);
                           await CreateTopicFireBase.createTopic(topic);
                           setState(() {
                             isLoading = false;
@@ -273,43 +278,35 @@ class _CreateTopicState extends State<CreateTopic> {
       ),
     );
   }
+
   Future<void> importVocabFromCSV() async {
-  try {
-    // Mở file trình duyệt và cho người dùng chọn file CSV
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['csv'],
-    );
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['csv'],
+      );
 
-    if (result != null && result.files.single.path != null) {
-      String filePath = result.files.single.path!;
-
-      // Đọc nội dung file CSV
-      //List<List<dynamic>> csvData = await _readCSVFile(filePath);
-
-      // Hiển thị dữ liệu lên giao diện
-      //_displayVocabData(csvData);
+      if (result != null && result.files.single.path != null) {
+        String filePath = result.files.single.path!;
+        List<List<dynamic>> csvData = await _readCSVFile(filePath);
+        _displayVocabData(csvData);
+      }
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error importing CSV: $e');
     }
-  } catch (e) {
-    // Xử lý lỗi
-    print('Error importing CSV: $e');
   }
-}
 
-// Future<List<List<dynamic>>> _readCSVFile(String filePath) async {
-//   final File file = File(filePath);
-//   final String csvContent = await file.readAsString();
-//   return CsvToListConverter().convert(csvContent);
-// }
-
-void _displayVocabData(List<List<dynamic>> csvData) {
-  // Hiển thị dữ liệu lên giao diện
-  for (final row in csvData) {
-    print('Term: ${row[0]}, Definition: ${row[1]}');
+  Future<List<List<dynamic>>> _readCSVFile(String filePath) async {
+    final File file = File(filePath);
+    final String csvContent = await file.readAsString();
+    return const CsvToListConverter().convert(csvContent);
   }
-}
-}
 
-class CsvToListConverter {
-  const CsvToListConverter();
+  void _displayVocabData(List<List<dynamic>> csvData) {
+    for (final row in csvData) {
+      // ignore: avoid_print
+      print('Term: ${row[0]}, Definition: ${row[1]}');
+    }
+  }
 }
